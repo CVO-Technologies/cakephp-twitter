@@ -9,7 +9,7 @@ Ensure `require` is present in `composer.json`.
 ```json
 {
     "require": {
-        "cvo-technologies/twitter": "0.1"
+        "cvo-technologies/twitter": "0.1.*"
     }
 }
 ```
