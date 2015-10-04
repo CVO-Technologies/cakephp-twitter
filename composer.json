@@ -1,0 +1,20 @@
+{
+    "name": "cvo-technologies/twitter",
+    "type": "cakephp-plugin",
+    "description": "Twitter plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marlin Cremers",
+            "email": "m.cremers@cvo-technologies.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CvoTechnologies\\Twitter\\": "src"
+        }
+    },
+    "require": {
+        "cakephp/cakephp": "3.*"
+    }
+}
