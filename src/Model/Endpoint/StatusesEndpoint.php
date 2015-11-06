@@ -8,6 +8,7 @@ use Cake\Event\EventManager;
 use CvoTechnologies\Twitter\Webservice\StreamQuery;
 use Muffin\Webservice\Model\Endpoint;
 use Muffin\Webservice\Model\Resource;
+use Muffin\Webservice\Query;
 
 class StatusesEndpoint extends Endpoint
 {
@@ -65,5 +66,12 @@ class StatusesEndpoint extends Endpoint
     public function streamQuery()
     {
         return new StreamQuery($this->webservice(), $this);
+    }
+
+    public function findRetweets(Query $query, array $options)
+    {
+        return $query->where([
+            'retweeted_status_id' => $options['status']
+        ]);
     }
 }

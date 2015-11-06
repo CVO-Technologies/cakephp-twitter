@@ -8,12 +8,20 @@ use Cake\Network\Http\Response;
 use CvoTechnologies\Twitter\Phirehose\OauthConsumer;
 use CvoTechnologies\Twitter\Phirehose\WebservicePhirehoseInterface;
 use Muffin\Webservice\Model\Resource;
+use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
 use Muffin\Webservice\Webservice\Webservice;
-use Muffin\Webservice\WebserviceQuery;
 
 class StatusesWebservice extends Webservice implements StreamWebserviceInterface
 {
+
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->addNestedResource('/1.1/statuses/show/:id.json', ['id']);
+        $this->addNestedResource('/1.1/statuses/retweets/:retweeted_status_id.json', ['retweeted_status_id']);
+    }
 
     public function stream(WebservicePhirehoseInterface $phirehose, EventManager $eventManager, array $options)
     {
@@ -77,19 +85,31 @@ class StatusesWebservice extends Webservice implements StreamWebserviceInterface
         return $this->stream($sc, $param, $options);
     }
 
-    protected function _executeReadQuery(WebserviceQuery $query, array $options = [])
+    protected function _executeReadQuery(Query $query, array $options = [])
     {
-        $parameters = $query->conditions();
-        $parameters['count'] = $query->limit();
+        $parameters = $query->clause('where');
+        $parameters['count'] = $query->clause('limit');
+
+        $url = '/1.1/statuses/user_timeline.json';
+        if ($this->nestedResource($query->clause('where'))) {
+            $url = $this->nestedResource($query->clause('where'));
+        }
 
         /* @var Response $response */
-        $response = $this->driver()->client()->get('/1.1/statuses/user_timeline.json', $parameters);
+        $response = $this->driver()->client()->get($url, $parameters);
 
         if (!$response->isOk()) {
             return false;
         }
 
-        $resources = $this->_transformResults($response->json, $options['resourceClass']);
+        $json = $response->json;
+        if (key($json) !== 0) {
+            $resource = $this->_transformResource($json, $options['resourceClass']);
+
+            return new ResultSet([$resource]);
+        }
+
+        $resources = $this->_transformResults($json, $options['resourceClass']);
 
         return new ResultSet($resources);
     }
