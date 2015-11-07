@@ -6,6 +6,13 @@ use Cake\Cache\Cache;
 use Cake\Network\Http\Client;
 use Muffin\Webservice\AbstractDriver;
 
+/**
+ * Class Twitter
+ *
+ * @method Client client() client(Client $client = null)
+ *
+ * @package CvoTechnologies\Twitter\Webservice\Driver
+ */
 class Twitter extends AbstractDriver
 {
 
@@ -14,20 +21,32 @@ class Twitter extends AbstractDriver
      */
     public function initialize()
     {
-        $accessToken = $this->accessToken();
-        // The access token is invalid
-        if (!$accessToken) {
-            // Get rid of the invalid access token
-            $this->invalidateAccessToken();
-
-            $accessToken = $this->accessToken();
-        }
-
-        $this->client(new Client([
+        $clientConfig = [
             'host' => 'api.twitter.com',
             'scheme' => 'https',
-            'headers' => ['Authorization' => 'Bearer ' . $accessToken]
-        ]));
+        ];
+        if ($this->config('oauthToken')) {
+            $clientConfig['auth'] = [
+                'type' => 'CvoTechnologies/Twitter.Twitter',
+                'consumerKey' => $this->config('consumerKey'),
+                'consumerSecret' => $this->config('consumerSecret'),
+                'token' => $this->config('oauthToken'),
+                'tokenSecret' => $this->config('oauthSecret')
+            ];
+        } else {
+            $accessToken = $this->accessToken();
+            // The access token is invalid
+            if (!$accessToken) {
+                // Get rid of the invalid access token
+                $this->invalidateAccessToken();
+
+                $accessToken = $this->accessToken();
+            }
+
+            $clientConfig['headers']['Authorization'] = 'Bearer ' . $accessToken;
+        }
+
+        $this->client(new Client($clientConfig));
     }
 
     /**

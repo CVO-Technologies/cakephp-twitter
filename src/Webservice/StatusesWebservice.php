@@ -9,18 +9,17 @@ use CvoTechnologies\Twitter\Phirehose\OauthConsumer;
 use CvoTechnologies\Twitter\Phirehose\WebservicePhirehoseInterface;
 use Muffin\Webservice\Model\Resource;
 use Muffin\Webservice\Query;
-use Muffin\Webservice\ResultSet;
-use Muffin\Webservice\Webservice\Webservice;
+use Muffin\Webservice\StreamQuery;
 
-class StatusesWebservice extends Webservice implements StreamWebserviceInterface
+class StatusesWebservice extends TwitterWebservice
 {
 
     public function initialize()
     {
         parent::initialize();
 
-        $this->addNestedResource('/1.1/statuses/show/:id.json', ['id']);
-        $this->addNestedResource('/1.1/statuses/retweets/:retweeted_status_id.json', ['retweeted_status_id']);
+        $this->addNestedResource($this->_baseUrl() . '/show/:id.json', ['id']);
+        $this->addNestedResource($this->_baseUrl() . '/retweets/:retweeted_status_id.json', ['retweeted_status_id']);
     }
 
     public function stream(WebservicePhirehoseInterface $phirehose, EventManager $eventManager, array $options)
@@ -49,7 +48,12 @@ class StatusesWebservice extends Webservice implements StreamWebserviceInterface
      */
     public function executeStream(StreamQuery $query, array $options = [])
     {
-        $stream = $this->_getStreamConsumer($query->method());
+        $method = \Phirehose::METHOD_FILTER;
+        if (isset($query->getOptions()['method'])) {
+            $method = $query->getOptions()['method'];
+        }
+
+        $stream = $this->_getStreamConsumer($method);
 
         if ($query->clause('where')['words']) {
             $stream->setTrack($query->clause('where')['words']);
@@ -85,33 +89,9 @@ class StatusesWebservice extends Webservice implements StreamWebserviceInterface
         return $this->stream($sc, $param, $options);
     }
 
-    protected function _executeReadQuery(Query $query, array $options = [])
+    protected function _defaultIndex()
     {
-        $parameters = $query->clause('where');
-        $parameters['count'] = $query->clause('limit');
-
-        $url = '/1.1/statuses/user_timeline.json';
-        if ($this->nestedResource($query->clause('where'))) {
-            $url = $this->nestedResource($query->clause('where'));
-        }
-
-        /* @var Response $response */
-        $response = $this->driver()->client()->get($url, $parameters);
-
-        if (!$response->isOk()) {
-            return false;
-        }
-
-        $json = $response->json;
-        if (key($json) !== 0) {
-            $resource = $this->_transformResource($json, $options['resourceClass']);
-
-            return new ResultSet([$resource]);
-        }
-
-        $resources = $this->_transformResults($json, $options['resourceClass']);
-
-        return new ResultSet($resources);
+        return 'user_timeline';
     }
 
     protected function _getStreamConsumer($method)
@@ -128,5 +108,17 @@ class StatusesWebservice extends Webservice implements StreamWebserviceInterface
         $sc->consumerSecret = $this->driver()->config('consumerSecret');
 
         return $sc;
+    }
+
+    protected function _executeCreateQuery(Query $query, array $options = [])
+    {
+        /* @var Response $response */
+        $response = $this->driver()->client()->post($this->_baseUrl() . '/update.json', $query->set());
+
+        if (!$response->isOk()) {
+            return false;
+        }
+
+        return $this->_transformResource($response->json, $options['resourceClass']);
     }
 }
