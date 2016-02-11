@@ -78,12 +78,12 @@ class TwitterWebservice extends Webservice
         }
 
         if (key($json) !== 0) {
-            $resource = $this->_transformResource($json, $options['resourceClass']);
+            $resource = $this->_transformResource($json, $query->endpoint()->resourceClass());
 
             return new ResultSet([$resource], 1);
         }
 
-        $resources = $this->_transformResults($json, $options['resourceClass']);
+        $resources = $this->_transformResults($json, $query->endpoint()->resourceClass());
 
         return new ResultSet($resources, count($resources));
     }

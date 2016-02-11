@@ -72,7 +72,7 @@ class StatusesWebservice extends TwitterWebservice
 
         $this->_checkResponse($response);
 
-        return $this->_transformResource($response->json, $options['resourceClass']);
+        return $this->_transformResource($response->json, $query->endpoint()->resourceClass());
     }
 
     /**
