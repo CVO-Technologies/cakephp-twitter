@@ -47,7 +47,7 @@ class TwitterWebservice extends Webservice
             $parameters['page'] = $query->clause('page');
         }
         if ($query->clause('offset')) {
-            $parameters['max_id'] = $query->clause('offset');
+            $parameters['since_id'] = $query->clause('offset');
         }
 
         if (!empty($query->where())) {
