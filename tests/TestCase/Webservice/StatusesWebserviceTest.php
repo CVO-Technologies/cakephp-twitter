@@ -122,8 +122,8 @@ class StatusesWebserviceTest extends TestCase
         $resultSet = $this->webservice->execute($query);
         $this->assertInstanceOf('Cake\\Datasource\\ResultSetDecorator', $resultSet);
         $this->assertEquals('Status 1', $resultSet->first()->text);
-        foreach ($resultSet as $response) {
-            $this->assertInstanceOf('Muffin\\Webservice\\Model\\Resource', $response);
+        foreach ($resultSet as $resource) {
+            $this->assertInstanceOf('Muffin\\Webservice\\Model\\Resource', $resource);
         }
     }
 
@@ -173,8 +173,8 @@ class StatusesWebserviceTest extends TestCase
         $resultSet = $this->webservice->execute($query);
         $this->assertInstanceOf('Cake\\Datasource\\ResultSetDecorator', $resultSet);
         $this->assertEquals('Status 1', $resultSet->first()->text);
-        foreach ($resultSet as $response) {
-            $this->assertInstanceOf('Muffin\\Webservice\\Model\\Resource', $response);
+        foreach ($resultSet as $resource) {
+            $this->assertInstanceOf('Muffin\\Webservice\\Model\\Resource', $resource);
         }
     }
 
