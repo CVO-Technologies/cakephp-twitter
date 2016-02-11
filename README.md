@@ -58,3 +58,37 @@ class StatusesController extends AppController
     }
 }
 ```
+
+### Streaming example
+
+This is an example of how to implement the Twitter streaming API.
+
+```php
+<?php
+
+namespace App\Shell;
+
+use Cake\Console\Shell;
+
+class StreamShell extends Shell
+{
+
+    public function beforeFilter(Event $event)
+    {
+        $this->loadModel('CvoTechnologies/Twitter.Statuses', 'Endpoint');
+    }
+
+    public function main()
+    {
+        $statuses = $this->Statuses
+            ->find('filter')
+            ->where([
+                'word' => 'twitter',
+            ]);
+
+        foreach ($statuses as $status) {
+            echo $status->text . PHP_EOL;
+        }
+    }
+}
+```
