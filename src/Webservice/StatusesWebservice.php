@@ -30,7 +30,7 @@ class StatusesWebservice extends TwitterWebservice
 
     protected function _executeReadQuery(Query $query, array $options = [])
     {
-        if ($query->stream()) {
+        if (isset($query->getOptions()['streamEndpoint'])) {
             $client = $this->driver()->streamClient();
 
             switch ($query->getOptions()['streamEndpoint']) {
