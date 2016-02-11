@@ -31,4 +31,18 @@ class StatusesEndpoint extends Endpoint
             'retweeted_status_id' => $options['status']
         ]);
     }
+
+    public function findSample(Query $query, array $options)
+    {
+        return $query->applyOptions([
+            'streamEndpoint' => 'sample',
+        ]);
+    }
+
+    public function findFilter(Query $query, array $options)
+    {
+        return $query->applyOptions([
+            'streamEndpoint' => 'filter',
+        ]);
+    }
 }

@@ -2,14 +2,15 @@
 
 namespace CvoTechnologies\Twitter\Webservice;
 
+use Cake\Datasource\ResultSetDecorator;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
+use Cake\Network\Exception\NotFoundException;
 use Cake\Network\Http\Response;
-use CvoTechnologies\Twitter\Phirehose\OauthConsumer;
-use CvoTechnologies\Twitter\Phirehose\WebservicePhirehoseInterface;
-use Muffin\Webservice\Model\Resource;
+use CvoTechnologies\Twitter\Webservice\Exception\UnknownStreamEndpointException;
+use Exception;
+use Muffin\Webservice\Model\Endpoint;
 use Muffin\Webservice\Query;
-use Muffin\Webservice\StreamQuery;
 
 class StatusesWebservice extends TwitterWebservice
 {
@@ -22,92 +23,42 @@ class StatusesWebservice extends TwitterWebservice
         $this->addNestedResource($this->_baseUrl() . '/retweets/:retweeted_status_id.json', ['retweeted_status_id']);
     }
 
-    public function stream(WebservicePhirehoseInterface $phirehose, EventManager $eventManager, array $options)
-    {
-        $eventManager->on(
-            'Statuses.raw.user_update',
-            ['priority' => 5],
-            function (Event $event) use ($options) {
-                $event->data = [
-                    'data' => $this->_transformResource($event->data['data'], $options['resourceClass'])
-                ];
-            }
-        );
-        $phirehose->setEventManager($eventManager);
-
-        return $phirehose->consume();
-    }
-
-    /**
-     * Executes a query
-     *
-     * @param StreamQuery $query The query to execute
-     * @param array $options The options to use
-     *
-     * @return bool
-     */
-    public function executeStream(StreamQuery $query, array $options = [])
-    {
-        $method = \Phirehose::METHOD_FILTER;
-        if (isset($query->getOptions()['method'])) {
-            $method = $query->getOptions()['method'];
-        }
-
-        $stream = $this->_getStreamConsumer($method);
-
-        if ($query->clause('where')['words']) {
-            $stream->setTrack($query->clause('where')['words']);
-        }
-        if ($query->clause('limit')) {
-            $stream->setCount($query->clause('limit'));
-        }
-
-        $eventManager = new EventManager();
-        $eventManager->on('Statuses.raw.friends', function (Event $event) use ($query) {
-            $event = new Event('Status.friends', $this, $event->data['data']);
-
-            $query->eventManager()->dispatch($event);
-        });
-        $eventManager->on('Statuses.raw.delete', function (Event $event) use ($query) {
-            $event = new Event('Status.deleted', $this, $event->data['data']);
-
-            $query->eventManager()->dispatch($event);
-        });
-        $eventManager->on('Statuses.raw.user_update', function (Event $event, Resource $resource) use ($query) {
-            $event = new Event('Status.placed', $this,['result' => $query->decorateResult($resource)]);
-
-            $query->eventManager()->dispatch($event);
-        });
-
-        $this->stream($stream, $eventManager, $options);
-    }
-
-    public function streamSample($param, array $options)
-    {
-        $sc = $this->_getStreamConsumer(OauthConsumer::METHOD_SAMPLE);
-
-        return $this->stream($sc, $param, $options);
-    }
-
     protected function _defaultIndex()
     {
         return 'user_timeline';
     }
 
-    protected function _getStreamConsumer($method)
+    protected function _executeReadQuery(Query $query, array $options = [])
     {
-        $sc = new OauthConsumer(
-            $this->driver()->config('oauthToken'),
-            $this->driver()->config('oauthSecret'),
-            $method
-        );
+        if ($query->stream()) {
+            $client = $this->driver()->streamClient();
 
-        $sc->setLogger($this->driver()->logger());
+            switch ($query->getOptions()['streamEndpoint']) {
+                case 'sample':
+                    $responses = $client->get($this->_baseUrl() . '/sample.json');
+                    break;
+                case 'filter':
+                    $postOptions = [];
+                    if (isset($query->clause('where')['word'])) {
+                        $postOptions['track'] = implode(',', (array)$query->clause('where')['word']);
+                    }
+                    if (isset($query->clause('where')['user'])) {
+                        $postOptions['follow'] = implode(',', (array)$query->clause('where')['user']);
+                    }
+                    if (isset($query->clause('where')['location'])) {
+                        $postOptions['locations'] = $query->clause('where')['location'];
+                    }
 
-        $sc->consumerKey = $this->driver()->config('consumerKey');
-        $sc->consumerSecret = $this->driver()->config('consumerSecret');
+                    $responses = $client->post($this->_baseUrl() . '/filter.json', $postOptions);
+                    break;
+                default:
+                    throw new UnknownStreamEndpointException([$query->getOptions()['streamEndpoint']]);
+            }
 
-        return $sc;
+            return new ResultSetDecorator($this->_transformStreamResponses($query->endpoint(), $responses));
+        }
+
+        return parent::_executeReadQuery($query, $options);
     }
 
     protected function _executeCreateQuery(Query $query, array $options = [])
@@ -120,5 +71,23 @@ class StatusesWebservice extends TwitterWebservice
         }
 
         return $this->_transformResource($response->json, $options['resourceClass']);
+    }
+
+    /**
+     * Transforms streamed responses into resources
+     *
+     * @param Endpoint $endpoint Endpoint to use for resource class
+     * @param \Iterator $responseIterator Iterator to get responses from
+     * @yield \Muffin\Webservice\Model\Resource Webservice resource
+     * @return \Generator Resource generator
+     * @throws Exception HTTP exception
+     */
+    protected function _transformStreamResponses(Endpoint $endpoint, \Iterator $responseIterator)
+    {
+        foreach ($responseIterator as $response) {
+            $this->_checkResponse($response);
+
+            yield $this->_transformResource($response->json, $endpoint->resourceClass());
+        }
     }
 }

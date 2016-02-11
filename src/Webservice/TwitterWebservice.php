@@ -2,10 +2,10 @@
 
 namespace CvoTechnologies\Twitter\Webservice;
 
-use Cake\Core\Exception\Exception;
 use Cake\Network\Exception\NotFoundException;
 use Cake\Network\Http\Response;
 use CvoTechnologies\Twitter\Webservice\Exception\RateLimitExceededException;
+use CvoTechnologies\Twitter\Webservice\Exception\UnknownErrorException;
 use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
 use Muffin\Webservice\Webservice\Webservice;
@@ -134,6 +134,13 @@ class TwitterWebservice extends Webservice
         /* @var Response $response */
         $response = $this->driver()->client()->get($url, $parameters);
 
+        $this->_checkResponse($response);
+
+        return $response->json;
+    }
+
+    protected function _checkResponse(Response $response)
+    {
         switch ($response->statusCode()) {
             case 404:
                 throw new NotFoundException($response->json['errors'][0]['message']);
@@ -142,10 +149,8 @@ class TwitterWebservice extends Webservice
         }
 
         if (!$response->isOk()) {
-            throw new Exception($response->json['errors'][0]['message']);
+            throw new UnknownErrorException([$response->statusCode(), $response->json['errors'][0]['message']]);
         }
-
-        return $response->json;
     }
 
 }

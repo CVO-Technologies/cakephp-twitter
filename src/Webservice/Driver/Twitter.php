@@ -4,6 +4,8 @@ namespace CvoTechnologies\Twitter\Webservice\Driver;
 
 use Cake\Cache\Cache;
 use Cake\Network\Http\Client;
+use Cake\Utility\Hash;
+use CvoTechnologies\Twitter\Network\Http\StreamClient;
 use Muffin\Webservice\AbstractDriver;
 
 /**
@@ -15,6 +17,8 @@ use Muffin\Webservice\AbstractDriver;
  */
 class Twitter extends AbstractDriver
 {
+
+    protected $_streamClient;
 
     /**
      * {@inheritDoc}
@@ -47,6 +51,28 @@ class Twitter extends AbstractDriver
         }
 
         $this->client(new Client($clientConfig));
+        $this->streamClient(new StreamClient(Hash::merge($clientConfig, [
+            'host' => 'stream.twitter.com',
+            'adapter' => 'CvoTechnologies\Twitter\Network\Http\Adapter\TwitterStream'
+        ])));
+    }
+
+    /**
+     * Set or return an instance of the stream client used for communication with the streaming API
+     *
+     * @param object $client The client to use
+     *
+     * @return $this
+     */
+    public function streamClient($client = null)
+    {
+        if ($client === null) {
+            return $this->_streamClient;
+        }
+
+        $this->_streamClient = $client;
+
+        return $this;
     }
 
     /**
