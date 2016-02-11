@@ -25,7 +25,7 @@ Add the following to the ```Webservice``` section of your application config.
 ```
         'twitter' => [
             'className' => 'Muffin\Webservice\Connection',
-            'service' => 'CvoTechnologies\Twitter\Webservice\Driver\Twitter',
+            'service' => 'CvoTechnologies/Twitter.Twitter',
             'consumerKey' => '',
             'consumerSecret' => ''
         ]
