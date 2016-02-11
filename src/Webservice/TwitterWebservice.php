@@ -73,7 +73,7 @@ class TwitterWebservice extends Webservice
             return new ResultSet([], 0);
         }
 
-        if ($json ===  false) {
+        if ($json === false) {
             return false;
         }
 
