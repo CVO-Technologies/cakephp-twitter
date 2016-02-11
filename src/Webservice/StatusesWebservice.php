@@ -30,35 +30,35 @@ class StatusesWebservice extends TwitterWebservice
 
     protected function _executeReadQuery(Query $query, array $options = [])
     {
-        if (isset($query->getOptions()['streamEndpoint'])) {
-            $client = $this->driver()->streamClient();
-
-            switch ($query->getOptions()['streamEndpoint']) {
-                case 'sample':
-                    $responses = $client->get($this->_baseUrl() . '/sample.json');
-                    break;
-                case 'filter':
-                    $postOptions = [];
-                    if (isset($query->clause('where')['word'])) {
-                        $postOptions['track'] = implode(',', (array)$query->clause('where')['word']);
-                    }
-                    if (isset($query->clause('where')['user'])) {
-                        $postOptions['follow'] = implode(',', (array)$query->clause('where')['user']);
-                    }
-                    if (isset($query->clause('where')['location'])) {
-                        $postOptions['locations'] = $query->clause('where')['location'];
-                    }
-
-                    $responses = $client->post($this->_baseUrl() . '/filter.json', $postOptions);
-                    break;
-                default:
-                    throw new UnknownStreamEndpointException([$query->getOptions()['streamEndpoint']]);
-            }
-
-            return new ResultSetDecorator($this->_transformStreamResponses($query->endpoint(), $responses));
+        if (!isset($query->getOptions()['streamEndpoint'])) {
+            return parent::_executeReadQuery($query, $options);
         }
 
-        return parent::_executeReadQuery($query, $options);
+        $client = $this->driver()->streamClient();
+
+        switch ($query->getOptions()['streamEndpoint']) {
+            case 'sample':
+                $responses = $client->get($this->_baseUrl() . '/sample.json');
+                break;
+            case 'filter':
+                $postOptions = [];
+                if (isset($query->clause('where')['word'])) {
+                    $postOptions['track'] = implode(',', (array)$query->clause('where')['word']);
+                }
+                if (isset($query->clause('where')['user'])) {
+                    $postOptions['follow'] = implode(',', (array)$query->clause('where')['user']);
+                }
+                if (isset($query->clause('where')['location'])) {
+                    $postOptions['locations'] = $query->clause('where')['location'];
+                }
+
+                $responses = $client->post($this->_baseUrl() . '/filter.json', $postOptions);
+                break;
+            default:
+                throw new UnknownStreamEndpointException([$query->getOptions()['streamEndpoint']]);
+        }
+
+        return new ResultSetDecorator($this->_transformStreamResponses($query->endpoint(), $responses));
     }
 
     protected function _executeCreateQuery(Query $query, array $options = [])
