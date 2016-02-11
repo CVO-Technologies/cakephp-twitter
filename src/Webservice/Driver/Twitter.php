@@ -87,8 +87,13 @@ class Twitter extends AbstractDriver
             return Cache::read($cacheKey);
         }
 
+        $bearerToken = $this->bearerToken();
+        if (!$bearerToken) {
+            return false;
+        }
+
         $client = new Client([
-            'headers' => ['Authorization' => 'Basic ' . $this->bearerToken()],
+            'headers' => ['Authorization' => 'Basic ' . $bearerToken],
             'host' => 'api.twitter.com',
             'scheme' => 'https',
         ]);
@@ -109,10 +114,16 @@ class Twitter extends AbstractDriver
     /**
      * Returns a bearer token for application authentication
      *
-     * @return string Bearer token
+     * @return string|bool Bearer token or bool in case of an error
      */
     public function bearerToken()
     {
+        if (!$this->config('consumerKey')) {
+            return false;
+        }
+        if (!$this->config('consumerSecret')) {
+            return false;
+        }
         $consumerKey = urlencode($this->config('consumerKey'));
         $consumerSecret = urlencode($this->config('consumerSecret'));
 
