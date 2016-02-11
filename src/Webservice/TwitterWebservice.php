@@ -57,7 +57,11 @@ class TwitterWebservice extends Webservice
             }
         }
 
-        $url = $this->_baseUrl() . '/' . $this->_defaultIndex() . '.json';
+        $index = $this->_defaultIndex();
+        if (isset($query->getOptions()['index'])) {
+            $index = $query->getOptions()['index'];
+        }
+        $url = $this->_baseUrl() . '/' . $index . '.json';
         if ($this->nestedResource($query->clause('where'))) {
             $url = $this->nestedResource($query->clause('where'));
         }
