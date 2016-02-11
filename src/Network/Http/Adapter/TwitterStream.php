@@ -26,21 +26,22 @@ class TwitterStream extends Stream
     {
         $this->_open($request->url());
 
-        return $this->_stream();
+        return $this->_stream($this->_stream);
     }
 
     /**
      * Reads the Twitter streaming API and yields responses
      *
+     * @param resource $stream Stream to read
      * @return \Generator Response generator
      * @yield \Cake\Network\Http\Response HTTP response
      */
-    protected function _stream()
+    protected function _stream($stream)
     {
-        while (!feof($this->_stream)) {
-            $this->_buff .= fread($this->_stream, 8192);
+        while (!feof($stream)) {
+            $this->_buff .= fread($stream, 8192);
 
-            $meta = stream_get_meta_data($this->_stream);
+            $meta = stream_get_meta_data($stream);
 
             while ($eolOffset = strpos($this->_buff, "\r\n")) {
                 $line = substr($this->_buff, 0, $eolOffset);
