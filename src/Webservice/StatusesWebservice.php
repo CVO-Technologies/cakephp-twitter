@@ -63,8 +63,12 @@ class StatusesWebservice extends TwitterWebservice
 
     protected function _executeCreateQuery(Query $query, array $options = [])
     {
+        $postArguments = [
+            'status' => $query->set()['text']
+        ];
+
         /* @var Response $response */
-        $response = $this->driver()->client()->post($this->_baseUrl() . '/update.json', $query->set());
+        $response = $this->driver()->client()->post($this->_baseUrl() . '/update.json', $postArguments);
 
         if (!$response->isOk()) {
             return false;
