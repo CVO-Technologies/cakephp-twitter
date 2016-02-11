@@ -70,9 +70,7 @@ class StatusesWebservice extends TwitterWebservice
         /* @var Response $response */
         $response = $this->driver()->client()->post($this->_baseUrl() . '/update.json', $postArguments);
 
-        if (!$response->isOk()) {
-            return false;
-        }
+        $this->_checkResponse($response);
 
         return $this->_transformResource($response->json, $options['resourceClass']);
     }
