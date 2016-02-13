@@ -3,9 +3,11 @@
 ## Installation
 
 ### Using Composer
+```
+composer require cvo-technologies/twitter
+```
 
-Ensure `require` is present in `composer.json`.
-
+Ensure `require` is present in `composer.json`:
 ```json
 {
     "require": {
@@ -16,13 +18,11 @@ Ensure `require` is present in `composer.json`.
 
 ## Usage
 
-If you want to get information about a specific repository
-
 ### Webservice config
 
-Add the following to the ```Webservice``` section of your application config.
+Add the following to the `Webservice` section of your application config.
 
-```
+```php
         'twitter' => [
             'className' => 'Muffin\Webservice\Connection',
             'service' => 'CvoTechnologies/Twitter.Twitter',
@@ -34,15 +34,12 @@ Add the following to the ```Webservice``` section of your application config.
 ### Controller
 
 ```php
-<?php
-
 namespace App\Controller;
 
 use Cake\Event\Event;
 
 class StatusesController extends AppController
 {
-
     public function beforeFilter(Event $event)
     {
         $this->loadModel('CvoTechnologies/Twitter.Statuses', 'Endpoint');
@@ -64,15 +61,12 @@ class StatusesController extends AppController
 This is an example of how to implement the Twitter streaming API.
 
 ```php
-<?php
-
 namespace App\Shell;
 
 use Cake\Console\Shell;
 
 class StreamShell extends Shell
 {
-
     public function beforeFilter(Event $event)
     {
         $this->loadModel('CvoTechnologies/Twitter.Statuses', 'Endpoint');
