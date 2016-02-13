@@ -78,11 +78,11 @@ class StatusesWebservice extends TwitterWebservice
     /**
      * Transforms streamed responses into resources
      *
-     * @param Endpoint $endpoint Endpoint to use for resource class
+     * @param \Muffin\Webservice\Model\Endpoint $endpoint Endpoint to use for resource class
      * @param \Iterator $responseIterator Iterator to get responses from
      * @yield \Muffin\Webservice\Model\Resource Webservice resource
      * @return \Generator Resource generator
-     * @throws Exception HTTP exception
+     * @throws \Exception HTTP exception
      */
     protected function _transformStreamResponses(Endpoint $endpoint, \Iterator $responseIterator)
     {
