@@ -56,7 +56,7 @@ class StatusesController extends AppController
 
     public function index()
     {
-        $statuses = $this->Statuses->find()->conditions([
+        $statuses = $this->Statuses->find()->where([
             'screen_name' => 'CakePHP',
         ]);
 
