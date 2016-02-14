@@ -1,5 +1,5 @@
 {
-  "name": "cvo-technologies/twitter",
+  "name": "cvo-technologies/cakephp-twitter",
   "type": "cakephp-plugin",
   "description": "Twitter plugin",
   "license": "MIT",
