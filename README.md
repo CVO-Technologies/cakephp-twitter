@@ -25,14 +25,16 @@ Plugin::load('CvoTechnologies/Twitter');
 
 ### Configure the Twitter webservice
 
-Add the following to the `Webservice` section of your application config.
+Add the following to the `Datasources` section of your application config.
 
 ```php
         'twitter' => [
             'className' => 'Muffin\Webservice\Connection',
             'service' => 'CvoTechnologies/Twitter.Twitter',
             'consumerKey' => '',
-            'consumerSecret' => ''
+            'consumerSecret' => '',
+            'oauthToken' => '',
+            'oauthSecret' => ''
         ]
 ```
 
@@ -74,8 +76,9 @@ use Cake\Console\Shell;
 
 class StreamShell extends Shell
 {
-    public function beforeFilter(Event $event)
+    public function initialize()
     {
+        $this->modelFactory('Endpoint', ['Muffin\Webservice\Model\EndpointRegistry', 'get']);
         $this->loadModel('CvoTechnologies/Twitter.Statuses', 'Endpoint');
     }
 
