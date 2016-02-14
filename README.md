@@ -4,21 +4,26 @@
 
 ### Using Composer
 ```
-composer require cvo-technologies/twitter
+composer require cvo-technologies/cakephp-twitter
 ```
 
 Ensure `require` is present in `composer.json`:
 ```json
 {
     "require": {
-        "cvo-technologies/twitter": "0.1.*"
+        "cvo-technologies/cakephp-twitter": "0.1.*"
     }
 }
 ```
 
-## Usage
+### Load the plugin
 
-### Webservice config
+```php
+Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
+Plugin::load('CvoTechnologies/Twitter');
+```
+
+### Configure the Twitter webservice
 
 Add the following to the `Webservice` section of your application config.
 
@@ -30,6 +35,8 @@ Add the following to the `Webservice` section of your application config.
             'consumerSecret' => ''
         ]
 ```
+
+## Usage
 
 ### Controller
 
