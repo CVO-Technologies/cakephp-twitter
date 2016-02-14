@@ -22,16 +22,9 @@
   },
   "require": {
     "cakephp/cakephp": "3.*",
-    "muffin/webservice": "dev-feature-orm",
-    "fennb/phirehose": "~1.0"
+    "muffin/webservice": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/CVO-Technologies/cakephp-webservice.git"
-    }
-  ]
+  }
 }
