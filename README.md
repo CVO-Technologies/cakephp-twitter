@@ -85,8 +85,7 @@ class StreamShell extends Shell
     public function main()
     {
         $statuses = $this->Statuses
-            ->find('filter')
-            ->where([
+            ->find('filterStream', [
                 'word' => 'twitter',
             ]);
 

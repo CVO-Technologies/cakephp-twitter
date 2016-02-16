@@ -32,17 +32,17 @@ class StatusesEndpoint extends Endpoint
         ]);
     }
 
-    public function findSample(Query $query, array $options)
+    public function findSampleStream(Query $query, array $options)
     {
         return $query->applyOptions([
             'streamEndpoint' => 'sample',
         ]);
     }
 
-    public function findFilter(Query $query, array $options)
+    public function findFilterStream(Query $query, array $options)
     {
         return $query->applyOptions([
             'streamEndpoint' => 'filter',
-        ]);
+        ])->where($options);
     }
 }
