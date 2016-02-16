@@ -145,15 +145,20 @@ class TwitterWebservice extends Webservice
 
     protected function _checkResponse(Response $response)
     {
+        if (isset($response->json['errors'][0]['message'])) {
+            $error = $response->json['errors'][0]['message'];
+        } else {
+            $error = $response->body();
+        }
         switch ($response->statusCode()) {
             case 404:
-                throw new NotFoundException($response->json['errors'][0]['message']);
+                throw new NotFoundException($error);
             case 429:
-                throw new RateLimitExceededException($response->json['errors'][0]['message'], 429);
+                throw new RateLimitExceededException($error, 429);
         }
 
         if (!$response->isOk()) {
-            throw new UnknownErrorException([$response->statusCode(), $response->json['errors'][0]['message']]);
+            throw new UnknownErrorException([$response->statusCode(), $error]);
         }
     }
 
