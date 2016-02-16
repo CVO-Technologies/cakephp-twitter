@@ -72,7 +72,7 @@ class StatusesWebservice extends TwitterWebservice
 
         $this->_checkResponse($response);
 
-        return $this->_transformResource($response->json, $query->endpoint()->resourceClass());
+        return $this->_transformResource($query->endpoint(), $response->json);
     }
 
     /**
@@ -89,7 +89,7 @@ class StatusesWebservice extends TwitterWebservice
         foreach ($responseIterator as $response) {
             $this->_checkResponse($response);
 
-            yield $this->_transformResource($response->json, $endpoint->resourceClass());
+            yield $this->_transformResource($endpoint, $response->json);
         }
     }
 }
