@@ -2,6 +2,7 @@
 
 namespace CvoTechnologies\Twitter\Webservice;
 
+use Cake\Core\Exception\Exception;
 use Cake\Network\Exception\NotFoundException;
 use Cake\Network\Http\Response;
 use CvoTechnologies\Twitter\Webservice\Exception\RateLimitExceededException;
@@ -31,10 +32,10 @@ class TwitterWebservice extends Webservice
         $response = $this->driver()->client()->post($this->_baseUrl() . '/create.json', $query->set());
 
         if (!$response->isOk()) {
-            throw new Exception($response->json['errors'][0]['message']);
+            throw new Exception($response->json['error']);
         }
 
-        return $this->_transformResource($response->json, $options['resourceClass']);
+        return $this->_transformResource($query->endpoint(), $response->json);
     }
 
     protected function _executeReadQuery(Query $query, array $options = [])
@@ -50,18 +51,30 @@ class TwitterWebservice extends Webservice
             $parameters['since_id'] = $query->clause('offset');
         }
 
-        if (!empty($query->where())) {
-            $displayField = $query->endpoint()->aliasField($query->endpoint()->displayField());
-            if (isset($query->where()[$displayField])) {
-                $parameters['q'] = $query->where()[$displayField];
-            }
-        }
-
         $index = $this->_defaultIndex();
         if (isset($query->getOptions()['index'])) {
             $index = $query->getOptions()['index'];
         }
         $url = $this->_baseUrl() . '/' . $index . '.json';
+
+        $search = isset($query->where()['q']);
+        if (!empty($query->where())) {
+            $displayField = $query->endpoint()->aliasField($query->endpoint()->displayField());
+            if (isset($query->where()[$displayField])) {
+                $parameters['q'] = $query->where()[$displayField];
+            }
+            if ($search) {
+                $parameters['q'] = $query->where()['q'];
+
+                $url = $this->_baseUrl() . '/search/tweets.json';
+                if ($query->endpoint()->endpoint() === 'statuses') {
+                    $url = substr($url, 0, 5) . substr($url, 14);
+                }
+
+                unset($parameters['page']);
+            }
+        }
+
         if ($this->nestedResource($query->clause('where'))) {
             $url = $this->nestedResource($query->clause('where'));
         }
@@ -81,6 +94,16 @@ class TwitterWebservice extends Webservice
             return false;
         }
 
+        if ($json === null) {
+            $json = [];
+        }
+
+        if ($search) {
+            $resources = $this->_transformResults($query->endpoint(), $json[$query->endpoint()->endpoint()]);
+
+            return new ResultSet($resources, $json['search_metadata']['count']);
+        }
+
         if (key($json) !== 0) {
             $resource = $this->_transformResource($query->endpoint(), $json);
 
@@ -89,7 +112,17 @@ class TwitterWebservice extends Webservice
 
         $resources = $this->_transformResults($query->endpoint(), $json);
 
-        return new ResultSet($resources, count($resources));
+        $total = count($resources);
+        switch ($index) {
+            case 'user_timeline':
+                $total = 3200;
+                break;
+            case 'home_timeline':
+                $total = 800;
+                break;
+        }
+
+        return new ResultSet($resources, $total);
     }
 
     protected function _executeUpdateQuery(Query $query, array $options = [])

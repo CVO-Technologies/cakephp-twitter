@@ -14,7 +14,9 @@ use Muffin\Webservice\Query;
 
 class StatusesWebservice extends TwitterWebservice
 {
-
+    /**
+     * {@inheritDoc}
+     */
     public function initialize()
     {
         parent::initialize();
@@ -23,11 +25,17 @@ class StatusesWebservice extends TwitterWebservice
         $this->addNestedResource($this->_baseUrl() . '/retweets/:retweeted_status_id.json', ['retweeted_status_id']);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _defaultIndex()
     {
         return 'user_timeline';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeReadQuery(Query $query, array $options = [])
     {
         if (!isset($query->getOptions()['streamEndpoint'])) {
@@ -61,6 +69,9 @@ class StatusesWebservice extends TwitterWebservice
         return new ResultSetDecorator($this->_transformStreamResponses($query->endpoint(), $responses));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeCreateQuery(Query $query, array $options = [])
     {
         $postArguments = [

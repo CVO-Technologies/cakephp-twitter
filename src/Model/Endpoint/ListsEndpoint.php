@@ -5,9 +5,12 @@ namespace CvoTechnologies\Twitter\Model\Endpoint;
 use Cake\Datasource\RulesChecker;
 use Cake\Validation\Validator;
 use Muffin\Webservice\Model\Endpoint;
+use Search\Manager;
+use Search\Model\Behavior\SearchableTrait;
 
 class ListsEndpoint extends Endpoint
 {
+    use SearchableTrait;
 
     public function initialize(array $config)
     {
@@ -15,6 +18,11 @@ class ListsEndpoint extends Endpoint
 
         $this->primaryKey('id');
         $this->displayField('name');
+    }
+
+    public function searchManager()
+    {
+        return new Manager($this);
     }
 
     public function buildRules(RulesChecker $rules)
