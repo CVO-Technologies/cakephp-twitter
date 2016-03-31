@@ -14,7 +14,6 @@ use Muffin\Webservice\Query;
  */
 class StatusesWebserviceTest extends TestCase
 {
-
     public function setUp()
     {
         parent::setUp();

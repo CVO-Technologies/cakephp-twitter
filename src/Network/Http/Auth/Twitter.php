@@ -6,7 +6,6 @@ use Cake\Network\Http\Auth\Oauth;
 
 class Twitter extends Oauth
 {
-
     /**
      * Use HMAC-SHA1 signing.
      *
@@ -58,12 +57,12 @@ class Twitter extends Oauth
         foreach ($data as $key => $value) {
             $params[] = $key . '="' . $value . '"';
         }
-        $out .= implode(',', $params);  // Required for Twitter
+        $out .= implode(',', $params); // Required for Twitter
         return $out;
     }
 
     /**
-     * Sorts and normalizes request data and oauthValues
+     * Sorts and normalizes request data and oauthValues.
      *
      * Section 9.1.1 of Oauth spec.
      *

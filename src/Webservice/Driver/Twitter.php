@@ -9,15 +9,12 @@ use CvoTechnologies\Twitter\Network\Http\StreamClient;
 use Muffin\Webservice\AbstractDriver;
 
 /**
- * Class Twitter
+ * Class Twitter.
  *
  * @method Client client() client(Client $client = null)
- *
- * @package CvoTechnologies\Twitter\Webservice\Driver
  */
 class Twitter extends AbstractDriver
 {
-
     protected $_streamClient;
 
     /**
@@ -58,7 +55,7 @@ class Twitter extends AbstractDriver
     }
 
     /**
-     * Set or return an instance of the stream client used for communication with the streaming API
+     * Set or return an instance of the stream client used for communication with the streaming API.
      *
      * @param object $client The client to use
      *
@@ -76,7 +73,7 @@ class Twitter extends AbstractDriver
     }
 
     /**
-     * Returns a application access token
+     * Returns a application access token.
      *
      * @return string|bool The access token or false in case of a failure
      */
@@ -102,7 +99,7 @@ class Twitter extends AbstractDriver
             'grant_type' => 'client_credentials'
         ]);
 
-        if ((!$response->isOk()) ||  (!$response->json['token_type'])) {
+        if ((!$response->isOk()) || (!$response->json['token_type'])) {
             return false;
         }
 
@@ -112,7 +109,7 @@ class Twitter extends AbstractDriver
     }
 
     /**
-     * Returns a bearer token for application authentication
+     * Returns a bearer token for application authentication.
      *
      * @return string|bool Bearer token or bool in case of an error
      */
@@ -131,7 +128,7 @@ class Twitter extends AbstractDriver
     }
 
     /**
-     * Invalidates the locally stored access token
+     * Invalidates the locally stored access token.
      *
      * @return void
      */

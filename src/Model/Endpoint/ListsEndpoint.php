@@ -8,7 +8,9 @@ use Muffin\Webservice\Model\Endpoint;
 
 class ListsEndpoint extends Endpoint
 {
-
+    /**
+     * {@inheritDoc}
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -17,6 +19,9 @@ class ListsEndpoint extends Endpoint
         $this->displayField('name');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function buildRules(RulesChecker $rules)
     {
         $rules->addCreate(function () {
@@ -26,6 +31,9 @@ class ListsEndpoint extends Endpoint
         return parent::buildRules($rules);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function validationDefault(Validator $validator)
     {
         $validator
