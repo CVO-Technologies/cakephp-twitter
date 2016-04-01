@@ -7,7 +7,6 @@ use Cake\Network\Http\Request;
 
 class StreamClient extends Client
 {
-
     /**
      * Send a stream request.
      *

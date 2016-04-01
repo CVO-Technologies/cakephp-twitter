@@ -6,5 +6,4 @@ use Cake\Core\Exception\Exception;
 
 class RateLimitExceededException extends Exception
 {
-
 }

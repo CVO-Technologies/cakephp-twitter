@@ -11,20 +11,25 @@ use Muffin\Webservice\ResultSet;
 use Muffin\Webservice\Webservice\Webservice;
 
 /**
- * Class TwitterWebservice
+ * Class TwitterWebservice.
  *
  * @method Driver\Twitter driver()
- *
- * @package CvoTechnologies\Twitter\Webservice
  */
 class TwitterWebservice extends Webservice
 {
-
+    /**
+     * Return base url for API calls based on endpoint.
+     *
+     * @return string base url
+     */
     protected function _baseUrl()
     {
         return '/1.1/' . $this->endpoint();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeCreateQuery(Query $query, array $options = [])
     {
         /* @var Response $response */
@@ -37,6 +42,9 @@ class TwitterWebservice extends Webservice
         return $this->_transformResource($response->json, $options['resourceClass']);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeReadQuery(Query $query, array $options = [])
     {
         $parameters = $query->where();
@@ -92,6 +100,9 @@ class TwitterWebservice extends Webservice
         return new ResultSet($resources, count($resources));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeUpdateQuery(Query $query, array $options = [])
     {
         if ((!isset($query->where()['id'])) || (is_array($query->where()['id']))) {
@@ -110,6 +121,9 @@ class TwitterWebservice extends Webservice
         return $this->_transformResource($response->json, $options['resourceClass']);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeDeleteQuery(Query $query, array $options = [])
     {
         if ((!isset($query->where()['id'])) || (is_array($query->where()['id']))) {
@@ -128,11 +142,23 @@ class TwitterWebservice extends Webservice
         return 1;
     }
 
+    /**
+     * Return default index to be used when no conditions are supplied.
+     *
+     * @return string Default index.
+     */
     protected function _defaultIndex()
     {
         return 'list';
     }
 
+    /**
+     * Get data from the Twitter API.
+     *
+     * @param string$url The URL of the endpoing to fetch information from.
+     * @param array $parameters The GET parameters to pass to the endpoint.
+     * @return mixed The JSON response data.
+     */
     protected function _doRequest($url, $parameters)
     {
         /* @var Response $response */
@@ -143,6 +169,12 @@ class TwitterWebservice extends Webservice
         return $response->json;
     }
 
+    /**
+     * Checks whether there are any errors in the response from Twitter.
+     *
+     * @param Response $response The response from Twitter.
+     * @return void
+     */
     protected function _checkResponse(Response $response)
     {
         if (isset($response->json['errors'][0]['message'])) {
@@ -161,5 +193,4 @@ class TwitterWebservice extends Webservice
             throw new UnknownErrorException([$response->statusCode(), $error]);
         }
     }
-
 }

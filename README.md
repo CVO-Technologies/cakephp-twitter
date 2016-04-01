@@ -1,5 +1,12 @@
 # Twitter plugin
 
+
+[![Build Status](https://img.shields.io/travis/CVO-Technologies/cakephp-twitter/master.svg?style=flat-square)](https://travis-ci.org/CVO-Technologies/cakephp-twitter)
+[![StyleCI Status](https://styleci.io/repos/43746752/shield)](https://styleci.io/repos/43746752)
+[![Coverage Status](https://img.shields.io/codecov/c/github/CVO-Technologies/cakephp-twitter/master.svg?style=flat-square)](https://codecov.io/github/CVO-Technologies/cakephp-twitter)
+[![Total Downloads](https://img.shields.io/packagist/dt/CVO-Technologies/cakephp-twitter.svg?style=flat-square)](https://packagist.org/packages/CVO-Technologies/cakephp-twitter)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE.txt)
+
 ## Installation
 
 ### Using Composer
