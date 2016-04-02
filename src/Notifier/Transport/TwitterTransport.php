@@ -16,7 +16,7 @@ class TwitterTransport extends AbstractTransport
     const TYPE = 'twitter';
 
     /**
-     * Send notification
+     * Send notification.
      *
      * @param \CvoTechnologies\Notifier\Notification $notification Notification instance.
      * @return array
