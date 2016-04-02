@@ -155,6 +155,41 @@ class TwitterWebserviceTest extends TestCase
         $this->assertEquals(2, $resultSet->count());
     }
 
+    public function testCreate()
+    {
+        $client = $this->getMockBuilder('Cake\\Network\\Http\\Client')
+            ->setMethods([
+                'post'
+            ])
+            ->getMock();
+
+        $client
+            ->expects($this->once())
+            ->method('post')
+            ->with('/1.1/statuses/create.json', [
+                'status' => 'test123'
+            ])
+            ->willReturn(new Response([
+                'HTTP/1.1 200 Ok'
+            ], json_encode([
+                'id' => 2,
+                'text' => 'Status 2'
+            ])));
+
+        $this->webservice->driver()->client($client);
+
+        $query = new Query($this->webservice, new Endpoint());
+        $query->action(Query::ACTION_CREATE);
+        $query->set([
+            'status' => 'test123'
+        ]);
+
+        $result = $this->webservice->execute($query);
+        $this->assertInstanceOf('Muffin\Webservice\Model\Resource', $result);
+        $this->assertEquals(2, $result->id);
+        $this->assertEquals('Status 2', $result->text);
+    }
+
     public function tearDown()
     {
         parent::tearDown();
