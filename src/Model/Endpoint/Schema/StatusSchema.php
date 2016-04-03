@@ -6,6 +6,9 @@ use Muffin\Webservice\Model\Schema;
 
 class StatusSchema extends Schema
 {
+    /**
+     * {@inheritDoc}
+     */
     public function initialize()
     {
         parent::initialize();
