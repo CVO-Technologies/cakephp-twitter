@@ -25,6 +25,8 @@
     "muffin/webservice": "~1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.0"
-  }
+      "phpunit/phpunit": "~4.0",
+      "cvo-technologies/stream-emulation": "dev-master"
+  },
+  "minimum-stability": "dev"
 }

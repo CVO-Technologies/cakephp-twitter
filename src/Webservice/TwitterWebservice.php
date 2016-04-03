@@ -119,7 +119,7 @@ class TwitterWebservice extends Webservice
             throw new Exception($response->json['errors'][0]['message']);
         }
 
-        return $this->_transformResource($response->json, $options['resourceClass']);
+        return $this->_transformResource($query->endpoint(), $response->json);
     }
 
     /**
@@ -140,7 +140,7 @@ class TwitterWebservice extends Webservice
             throw new Exception($response->json['errors'][0]['message']);
         }
 
-        return 1;
+        return true;
     }
 
     /**

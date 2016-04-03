@@ -7,8 +7,16 @@ use CvoTechnologies\Twitter\Webservice\Driver\Twitter;
 use CvoTechnologies\Twitter\Webservice\UsersWebservice;
 use Muffin\Webservice\Model\Endpoint;
 
+class TestUsersWebservice extends UsersWebservice
+{
+    public function defaultIndex()
+    {
+        return $this->_defaultIndex();
+    }
+}
+
 /**
- * @property UsersWebservice webservice
+ * @property TestUsersWebservice webservice
  */
 class UsersWebserviceTest extends TestCase
 {
@@ -17,7 +25,7 @@ class UsersWebserviceTest extends TestCase
         parent::setUp();
 
         $driver = new Twitter([]);
-        $this->webservice = new UsersWebservice([
+        $this->webservice = new TestUsersWebservice([
             'driver' => $driver,
             'endpoint' => 'users'
         ]);
@@ -28,6 +36,11 @@ class UsersWebserviceTest extends TestCase
         $this->assertEquals('/1.1/users/show.json?user_id=123', $this->webservice->nestedResource([
             'id' => 123
         ]));
+    }
+
+    public function testDefaultIndex()
+    {
+        $this->assertEquals('search', $this->webservice->defaultIndex());
     }
 
     public function tearDown()

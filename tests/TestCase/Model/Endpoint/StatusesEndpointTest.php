@@ -2,6 +2,7 @@
 
 namespace CvoTechnologies\Twitter\Test\TestCase\Model\Endpoint;
 
+use Cake\Network\Http\Response;
 use Cake\TestSuite\TestCase;
 use CvoTechnologies\Twitter\Model\Endpoint\StatusesEndpoint;
 use CvoTechnologies\Twitter\Webservice\Driver\Twitter;
@@ -114,5 +115,41 @@ class StatusesEndpointTest extends TestCase
                 'Word1'
             ],
         ], $query->where());
+    }
+
+    public function testSave()
+    {
+        $connection = new Connection([
+            'service' => 'CvoTechnologies/Twitter.Twitter'
+        ]);
+        $statusesEndpoint = new StatusesEndpoint([
+            'connection' => $connection
+        ]);
+
+        $client = $this->getMockBuilder('Cake\\Network\\Http\\Client')
+            ->setMethods([
+                'post'
+            ])
+            ->getMock();
+
+        $client
+            ->expects($this->once())
+            ->method('post')
+            ->with('/1.1/statuses/update.json', [
+                'status' => 'Hello!'
+            ])
+            ->willReturn(new Response([
+                'HTTP/1.1 200 Ok'
+            ], json_encode([
+                'id' => 1234,
+                'text' => 'Hello!'
+            ])));
+
+        $statusesEndpoint->webservice()->driver()->client($client);
+
+        $resource = $statusesEndpoint->newEntity([
+            'text' => 'Hello!'
+        ]);
+        $this->assertInstanceOf('Muffin\Webservice\Model\Resource', $statusesEndpoint->save($resource));
     }
 }

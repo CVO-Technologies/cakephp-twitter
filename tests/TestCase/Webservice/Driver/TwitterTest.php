@@ -2,11 +2,21 @@
 
 namespace CvoTechnologies\Twitter\Test\TestCase\Webservice\Driver;
 
+use Cake\Cache\Cache;
 use Cake\TestSuite\TestCase;
+use CvoTechnologies\StreamEmulation\Emulation\HttpEmulation;
+use CvoTechnologies\StreamEmulation\StreamWrapper;
 use CvoTechnologies\Twitter\Webservice\Driver\Twitter;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
 
 class TwitterTest extends TestCase
 {
+    public function setUp()
+    {
+        StreamWrapper::overrideWrapper('https');
+    }
+
     public function testInitializeOAuth()
     {
         $twitter = new Twitter([
@@ -34,15 +44,19 @@ class TwitterTest extends TestCase
 
     public function testInitializeAccessToken()
     {
-        $driver = $this->getMockBuilder('CvoTechnologies\Twitter\Webservice\Driver\Twitter')
-            ->setMethods(['accessToken'])
-            ->setConstructorArgs([[]])
-            ->getMock();
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) {
+            $this->assertEquals('/oauth2/token', $request->getUri()->getPath());
 
-        $driver->expects($this->once())
-            ->method('accessToken')
-            ->willReturn('testToken');
+            return new Response(200, [], json_encode([
+                'token_type' => 'bearer',
+                'access_token' => 'testToken'
+            ]));
+        }));
 
+        $driver = new Twitter([
+            'consumerKey' => 'consumerKey-1',
+            'consumerSecret' => 'consumerSecret-2',
+        ]);
         $driver->initialize([]);
 
         $this->assertEquals('Bearer testToken', $driver->client()->config()['headers']['Authorization']);
@@ -50,18 +64,35 @@ class TwitterTest extends TestCase
 
     public function testInitializeAccessTokenInvalid()
     {
-        $driver = $this->getMockBuilder('CvoTechnologies\Twitter\Webservice\Driver\Twitter')
-            ->setMethods(['accessToken', 'invalidateAccessToken'])
-            ->setConstructorArgs([[]])
-            ->getMock();
+        $invocation = 0;
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) use (&$invocation) {
+            ++$invocation;
 
-        $driver->expects($this->exactly(2))
-            ->method('accessToken')
-            ->willReturnOnConsecutiveCalls(false, 'testToken');
-        $driver->expects($this->once())
-            ->method('invalidateAccessToken');
+            $this->assertEquals('/oauth2/token', $request->getUri()->getPath());
+
+            if ($invocation === 1) {
+                return new Response(500);
+            }
+
+            return new Response(200, [], json_encode([
+                'token_type' => 'bearer',
+                'access_token' => 'testToken'
+            ]));
+        }));
+
+        $driver = new Twitter([
+            'consumerKey' => 'consumerKey-1',
+            'consumerSecret' => 'consumerSecret-2',
+        ]);
 
         $driver->initialize([]);
         $this->assertEquals('Bearer testToken', $driver->client()->config()['headers']['Authorization']);
+        $this->assertEquals(2, $invocation);
+    }
+
+    public function tearDown()
+    {
+        StreamWrapper::restoreWrapper('https');
+        Cache::clear();
     }
 }
