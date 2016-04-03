@@ -138,6 +138,212 @@ class TwitterWebserviceTest extends TestCase
         $this->assertEquals(2, $resultSet->count());
     }
 
+    public function testGeneralPage()
+    {
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertEquals('/1.1/statuses/user_timeline.json', $request->getUri()->getPath());
+
+            $this->assertEquals([
+                'page' => 1
+            ], \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery()));
+
+            return new \GuzzleHttp\Psr7\Response(200, [], json_encode([
+                [
+                    'id' => 2,
+                    'text' => 'Status 2'
+                ],
+                [
+                    'id' => 3,
+                    'text' => 'Status 3'
+                ]
+            ]));
+        }));
+
+        $query = new Query($this->webservice, new Endpoint());
+        $query->read();
+        $query->page(1);
+        $query->applyOptions([
+            'index' => 'user_timeline'
+        ]);
+
+        $resultSet = $this->webservice->execute($query);
+        $this->assertInstanceOf('Muffin\\Webservice\\ResultSet', $resultSet);
+        $this->assertInstanceOf('Muffin\\Webservice\\Model\\Resource', $resultSet->first());
+        $this->assertEquals('Status 2', $resultSet->first()->text);
+        $this->assertEquals(2, $resultSet->count());
+    }
+
+    public function testGeneralReadWhere()
+    {
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertEquals('/1.1/statuses/user_timeline.json', $request->getUri()->getPath());
+
+            $this->assertEquals([
+                'testParameter' => 'testValue'
+            ], \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery()));
+
+            return new \GuzzleHttp\Psr7\Response(200, [], json_encode([
+                [
+                    'id' => 2,
+                    'text' => 'Status 2'
+                ],
+                [
+                    'id' => 3,
+                    'text' => 'Status 3'
+                ]
+            ]));
+        }));
+
+        $query = new Query($this->webservice, new Endpoint([
+            'endpoint' => 'statuses',
+            'connection' => $this->webservice->driver()
+        ]));
+        $query->read();
+        $query->where([
+            'testParameter' => 'testValue'
+        ]);
+        $query->applyOptions([
+            'index' => 'user_timeline'
+        ]);
+
+        $resultSet = $this->webservice->execute($query);
+        $this->assertInstanceOf('Muffin\\Webservice\\ResultSet', $resultSet);
+        $this->assertInstanceOf('Muffin\\Webservice\\Model\\Resource', $resultSet->first());
+        $this->assertEquals('Status 2', $resultSet->first()->text);
+        $this->assertEquals(2, $resultSet->count());
+    }
+
+    public function testGeneralReadDisplayField()
+    {
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertEquals('/1.1/statuses/user_timeline.json', $request->getUri()->getPath());
+
+            $this->assertEquals([
+                'text' => 'Test Status'
+            ], \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery()));
+
+            return new \GuzzleHttp\Psr7\Response(200, [], json_encode([
+                [
+                    'id' => 2,
+                    'text' => 'Status 2'
+                ],
+                [
+                    'id' => 3,
+                    'text' => 'Status 3'
+                ]
+            ]));
+        }));
+
+        $query = new Query($this->webservice, new Endpoint([
+            'endpoint' => 'statuses',
+            'connection' => $this->webservice->driver()
+        ]));
+        $query->read();
+        $query->where([
+            'text' => 'Test Status'
+        ]);
+        $query->applyOptions([
+            'index' => 'user_timeline'
+        ]);
+
+        $resultSet = $this->webservice->execute($query);
+        $this->assertInstanceOf('Muffin\\Webservice\\ResultSet', $resultSet);
+        $this->assertInstanceOf('Muffin\\Webservice\\Model\\Resource', $resultSet->first());
+        $this->assertEquals('Status 2', $resultSet->first()->text);
+        $this->assertEquals(2, $resultSet->count());
+    }
+
+    public function testGeneralReadMultipleIds()
+    {
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertEquals('/1.1/statuses/lookup.json', $request->getUri()->getPath());
+
+            $this->assertEquals('id=1%2C2%2C3%2C4', $request->getUri()->getQuery());
+
+            return new \GuzzleHttp\Psr7\Response(200, [], json_encode([
+                [
+                    'id' => 2,
+                    'text' => 'Status 2'
+                ],
+                [
+                    'id' => 3,
+                    'text' => 'Status 3'
+                ]
+            ]));
+        }));
+
+        $query = new Query($this->webservice, new Endpoint([
+            'endpoint' => 'statuses',
+            'connection' => $this->webservice->driver()
+        ]));
+        $query->read();
+        $query->where([
+            'id' => [1, 2, 3, 4]
+        ]);
+        $query->applyOptions([
+            'index' => 'user_timeline'
+        ]);
+
+        $resultSet = $this->webservice->execute($query);
+        $this->assertInstanceOf('Muffin\\Webservice\\ResultSet', $resultSet);
+        $this->assertInstanceOf('Muffin\\Webservice\\Model\\Resource', $resultSet->first());
+        $this->assertEquals('Status 2', $resultSet->first()->text);
+        $this->assertEquals(2, $resultSet->count());
+    }
+
+    public function testGeneralRead404()
+    {
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertEquals('/1.1/statuses/list.json', $request->getUri()->getPath());
+
+            return new \GuzzleHttp\Psr7\Response(404);
+        }));
+
+        $query = new Query($this->webservice, new Endpoint([
+            'endpoint' => 'statuses',
+            'connection' => $this->webservice->driver()
+        ]));
+        $query->read();
+
+        $resultSet = $this->webservice->execute($query);
+        $this->assertEquals(0, $resultSet->count());
+    }
+
+    public function testGeneralReadSingle()
+    {
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertEquals('/1.1/statuses/list.json', $request->getUri()->getPath());
+
+            $this->assertEquals('id=1', $request->getUri()->getQuery());
+
+            return new \GuzzleHttp\Psr7\Response(200, [], json_encode([
+                'id' => 1,
+                'text' => 'Status 1'
+            ]));
+        }));
+
+        $query = new Query($this->webservice, new Endpoint([
+            'endpoint' => 'statuses',
+            'connection' => $this->webservice->driver()
+        ]));
+        $query->read();
+        $query->where([
+            'id' => 1
+        ]);
+
+        $resultSet = $this->webservice->execute($query);
+        $this->assertInstanceOf('Muffin\\Webservice\\ResultSet', $resultSet);
+        $this->assertInstanceOf('Muffin\\Webservice\\Model\\Resource', $resultSet->first());
+        $this->assertEquals('Status 1', $resultSet->first()->text);
+        $this->assertEquals(1, $resultSet->count());
+    }
+
     public function testCreate()
     {
         StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) {
