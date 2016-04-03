@@ -2,19 +2,29 @@
 
 namespace CvoTechnologies\Twitter\Test\TestCase\Model\Endpoint;
 
+use Cake\Datasource\ConnectionManager;
 use Cake\Network\Http\Response;
 use Cake\TestSuite\TestCase;
-use CvoTechnologies\Twitter\Model\Endpoint\StatusesEndpoint;
-use CvoTechnologies\Twitter\Webservice\Driver\Twitter;
-use Muffin\Webservice\Connection;
+use CvoTechnologies\StreamEmulation\Emulation\HttpEmulation;
+use CvoTechnologies\StreamEmulation\StreamWrapper;
+use Muffin\Webservice\Model\EndpointRegistry;
 use Muffin\Webservice\Query;
+use Psr\Http\Message\RequestInterface;
 
 class StatusesEndpointTest extends TestCase
 {
+    public function setUp()
+    {
+        StreamWrapper::overrideWrapper('https');
+        ConnectionManager::config('twitter', [
+            'className' => 'Muffin\Webservice\Connection',
+            'service' => 'CvoTechnologies/Twitter.Twitter'
+        ]);
+    }
+
     public function testInitialize()
     {
-        $statusesEndpoint = new StatusesEndpoint();
-        $statusesEndpoint->initialize([]);
+        $statusesEndpoint = EndpointRegistry::get('CvoTechnologies/Twitter.Statuses');
 
         $this->assertEquals('id', $statusesEndpoint->primaryKey());
         $this->assertEquals('text', $statusesEndpoint->displayField());
@@ -22,30 +32,18 @@ class StatusesEndpointTest extends TestCase
 
     public function testFindFavorite()
     {
-        $connection = new Connection([
-            'service' => 'CvoTechnologies/Twitter.Twitter'
-        ]);
-        $statusesEndpoint = new StatusesEndpoint([
-            'connection' => $connection
-        ]);
+        $statusesEndpoint = EndpointRegistry::get('CvoTechnologies/Twitter.Statuses');
 
-        $query = new Query($connection->webservice('statuses'), $statusesEndpoint);
-        $query = $statusesEndpoint->findFavorites($query);
+        $query = $statusesEndpoint->findFavorites($statusesEndpoint->query());
 
         $this->assertEquals('favorites', $query->webservice()->endpoint());
     }
 
     public function testFindFavoriteConditions()
     {
-        $connection = new Connection([
-            'service' => 'CvoTechnologies/Twitter.Twitter'
-        ]);
-        $statusesEndpoint = new StatusesEndpoint([
-            'connection' => $connection
-        ]);
+        $statusesEndpoint = EndpointRegistry::get('CvoTechnologies/Twitter.Statuses');
 
-        $query = new Query($connection->webservice('statuses'), $statusesEndpoint);
-        $query = $statusesEndpoint->findFavorites($query, [
+        $query = $statusesEndpoint->findFavorites($statusesEndpoint->query(), [
             'condition1' => 'value1'
         ]);
 
@@ -57,15 +55,9 @@ class StatusesEndpointTest extends TestCase
 
     public function testFindRetweets()
     {
-        $connection = new Connection([
-            'service' => 'CvoTechnologies/Twitter.Twitter'
-        ]);
-        $statusesEndpoint = new StatusesEndpoint([
-            'connection' => $connection
-        ]);
+        $statusesEndpoint = EndpointRegistry::get('CvoTechnologies/Twitter.Statuses');
 
-        $query = new Query($connection->webservice('statuses'), $statusesEndpoint);
-        $query = $statusesEndpoint->findRetweets($query, [
+        $query = $statusesEndpoint->findRetweets($statusesEndpoint->query(), [
             'status' => 123
         ]);
 
@@ -76,15 +68,9 @@ class StatusesEndpointTest extends TestCase
 
     public function testfindSampleStream()
     {
-        $connection = new Connection([
-            'service' => 'CvoTechnologies/Twitter.Twitter'
-        ]);
-        $statusesEndpoint = new StatusesEndpoint([
-            'connection' => $connection
-        ]);
+        $statusesEndpoint = EndpointRegistry::get('CvoTechnologies/Twitter.Statuses');
 
-        $query = new Query($connection->webservice('statuses'), $statusesEndpoint);
-        $query = $statusesEndpoint->findSampleStream($query);
+        $query = $statusesEndpoint->findSampleStream($statusesEndpoint->query());
 
         $this->assertEquals([
             'streamEndpoint' => 'sample',
@@ -93,15 +79,9 @@ class StatusesEndpointTest extends TestCase
 
     public function testfindFilterStream()
     {
-        $connection = new Connection([
-            'service' => 'CvoTechnologies/Twitter.Twitter'
-        ]);
-        $statusesEndpoint = new StatusesEndpoint([
-            'connection' => $connection
-        ]);
+        $statusesEndpoint = EndpointRegistry::get('CvoTechnologies/Twitter.Statuses');
 
-        $query = new Query($connection->webservice('statuses'), $statusesEndpoint);
-        $query = $statusesEndpoint->findFilterStream($query, [
+        $query = $statusesEndpoint->findFilterStream($statusesEndpoint->query(), [
             'words' => [
                 'Word1'
             ]
@@ -119,37 +99,31 @@ class StatusesEndpointTest extends TestCase
 
     public function testSave()
     {
-        $connection = new Connection([
-            'service' => 'CvoTechnologies/Twitter.Twitter'
-        ]);
-        $statusesEndpoint = new StatusesEndpoint([
-            'connection' => $connection
-        ]);
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function (RequestInterface $request) {
+            $this->assertEquals('POST', $request->getMethod());
+            $this->assertEquals('/1.1/statuses/update.json', $request->getUri()->getPath());
 
-        $client = $this->getMockBuilder('Cake\\Network\\Http\\Client')
-            ->setMethods([
-                'post'
-            ])
-            ->getMock();
-
-        $client
-            ->expects($this->once())
-            ->method('post')
-            ->with('/1.1/statuses/update.json', [
+            $this->assertEquals([
                 'status' => 'Hello!'
-            ])
-            ->willReturn(new Response([
-                'HTTP/1.1 200 Ok'
-            ], json_encode([
+            ], \GuzzleHttp\Psr7\parse_query($request->getBody()->getContents()));
+
+            return new \GuzzleHttp\Psr7\Response(200, [], json_encode([
                 'id' => 1234,
                 'text' => 'Hello!'
-            ])));
+            ]));
+        }));
 
-        $statusesEndpoint->webservice()->driver()->client($client);
+        $statusesEndpoint = EndpointRegistry::get('CvoTechnologies/Twitter.Statuses');
 
         $resource = $statusesEndpoint->newEntity([
             'text' => 'Hello!'
         ]);
         $this->assertInstanceOf('Muffin\Webservice\Model\Resource', $statusesEndpoint->save($resource));
+    }
+
+    public function tearDown()
+    {
+        ConnectionManager::drop('twitter');
+        StreamWrapper::restoreWrapper('https');
     }
 }
