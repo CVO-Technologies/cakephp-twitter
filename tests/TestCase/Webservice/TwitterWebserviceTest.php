@@ -2,10 +2,8 @@
 
 namespace CvoTechnologies\Twitter\Test\TestCase\Webservice;
 
-use Cake\Network\Http\Response;
 use Cake\TestSuite\TestCase;
 use CvoTechnologies\StreamEmulation\Emulation\HttpEmulation;
-use CvoTechnologies\StreamEmulation\Emulator\HttpEmulator;
 use CvoTechnologies\StreamEmulation\StreamWrapper;
 use CvoTechnologies\Twitter\Webservice\Driver\Twitter;
 use CvoTechnologies\Twitter\Webservice\TwitterWebservice;

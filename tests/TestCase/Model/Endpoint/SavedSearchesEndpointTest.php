@@ -4,7 +4,6 @@ namespace CvoTechnologies\Twitter\Test\TestCase\Model\Endpoint;
 
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\TestCase;
-use Cake\Validation\Validator;
 use CvoTechnologies\StreamEmulation\Emulation\HttpEmulation;
 use CvoTechnologies\StreamEmulation\StreamWrapper;
 use GuzzleHttp\Psr7\Response;

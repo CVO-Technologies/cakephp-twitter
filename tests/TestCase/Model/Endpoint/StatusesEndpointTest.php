@@ -3,7 +3,6 @@
 namespace CvoTechnologies\Twitter\Test\TestCase\Model\Endpoint;
 
 use Cake\Datasource\ConnectionManager;
-use Cake\Network\Http\Response;
 use Cake\TestSuite\TestCase;
 use CvoTechnologies\StreamEmulation\Emulation\HttpEmulation;
 use CvoTechnologies\StreamEmulation\StreamWrapper;
