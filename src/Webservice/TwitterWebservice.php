@@ -2,6 +2,7 @@
 
 namespace CvoTechnologies\Twitter\Webservice;
 
+use Cake\Core\Exception\Exception;
 use Cake\Network\Exception\NotFoundException;
 use Cake\Network\Http\Response;
 use CvoTechnologies\Twitter\Webservice\Exception\RateLimitExceededException;
@@ -39,7 +40,7 @@ class TwitterWebservice extends Webservice
             throw new Exception($response->json['errors'][0]['message']);
         }
 
-        return $this->_transformResource($response->json, $options['resourceClass']);
+        return $this->_transformResource($query->endpoint(), $response->json);
     }
 
     /**
@@ -118,7 +119,7 @@ class TwitterWebservice extends Webservice
             throw new Exception($response->json['errors'][0]['message']);
         }
 
-        return $this->_transformResource($response->json, $options['resourceClass']);
+        return $this->_transformResource($query->endpoint(), $response->json);
     }
 
     /**
@@ -139,7 +140,7 @@ class TwitterWebservice extends Webservice
             throw new Exception($response->json['errors'][0]['message']);
         }
 
-        return 1;
+        return true;
     }
 
     /**
