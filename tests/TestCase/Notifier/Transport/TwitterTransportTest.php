@@ -3,9 +3,11 @@
 namespace CvoTechnologies\Twitter\Test\TestCase\Notifier\Transport;
 
 use Cake\Datasource\ConnectionManager;
-use Cake\Network\Http\Response;
 use Cake\TestSuite\TestCase;
+use CvoTechnologies\StreamEmulation\StreamWrapper;
 use CvoTechnologies\Twitter\Notifier\Transport\TwitterTransport;
+use CvoTechnologies\Twitter\Test\Emulation\StatusUpdateEmulation;
+use Psr\Http\Message\RequestInterface;
 
 class TwitterTransportTest extends TestCase
 {
@@ -15,38 +17,19 @@ class TwitterTransportTest extends TestCase
             'className' => 'Muffin\Webservice\Connection',
             'service' => 'CvoTechnologies/Twitter.Twitter',
         ]);
-    }
-
-    public function tearDown()
-    {
-        ConnectionManager::drop('twitter');
+        StreamWrapper::overrideWrapper('https');
     }
 
     public function testSend()
     {
-        $clientMock = $this->getMockBuilder('Cake\Network\Http\Client');
-        $clientMock->setMethods(['post']);
+        StreamWrapper::emulate(new StatusUpdateEmulation(function (RequestInterface $request) {
+            $this->assertEquals('POST', $request->getMethod());
+            $this->assertEquals('/1.1/statuses/update.json', $request->getUri()->getPath());
 
-        $client = $clientMock->getMock();
-        $client->expects($this->once())
-            ->method('post')
-            ->with(
-                '/1.1/statuses/update.json',
-                [
-                    'status' => 'Test123'
-                ]
-            )
-            ->willReturn(new Response(
-                [
-                    'HTTP/1.1 200 OK'
-                ],
-                json_encode([
-                    'id' => '1',
-                    'status' => 'Test123'
-                ])
-            ));
-
-        ConnectionManager::get('twitter')->client($client);
+            $this->assertEquals([
+                'status' => 'Test123'
+            ], \GuzzleHttp\Psr7\parse_query($request->getBody()->getContents()));
+        }));
 
         $notification = $this->getMock('CvoTechnologies\Notifier\Notification', ['message']);
         $notification
@@ -60,5 +43,11 @@ class TwitterTransportTest extends TestCase
             'id' => '1',
             'status' => 'Test123'
         ], $twitterTransport->send($notification));
+    }
+
+    public function tearDown()
+    {
+        StreamWrapper::restoreWrapper('https');
+        ConnectionManager::drop('twitter');
     }
 }
