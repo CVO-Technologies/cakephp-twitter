@@ -45,6 +45,30 @@ class TwitterTransportTest extends TestCase
         ], $twitterTransport->send($notification));
     }
 
+    public function testSendError()
+    {
+        $statusUpdateEmulation = new StatusUpdateEmulation(function (RequestInterface $request) {
+            $this->assertEquals('POST', $request->getMethod());
+            $this->assertEquals('/1.1/statuses/update.json', $request->getUri()->getPath());
+
+            $this->assertEquals([
+                'status' => 'Test123'
+            ], \GuzzleHttp\Psr7\parse_query($request->getBody()->getContents()));
+        });
+        $statusUpdateEmulation->setError(500, 'Could not insert');
+        StreamWrapper::emulate($statusUpdateEmulation);
+
+        $notification = $this->getMock('CvoTechnologies\Notifier\Notification', ['message']);
+        $notification
+            ->expects($this->once())
+            ->method('message')
+            ->with('twitter')
+            ->willReturn('Test123');
+
+        $twitterTransport = new TwitterTransport();
+        $this->assertFalse($twitterTransport->send($notification));
+    }
+
     public function tearDown()
     {
         StreamWrapper::restoreWrapper('https');
