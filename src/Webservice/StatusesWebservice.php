@@ -5,6 +5,7 @@ namespace CvoTechnologies\Twitter\Webservice;
 use Cake\Datasource\ResultSetDecorator;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
+use Cake\I18n\Time;
 use Cake\Network\Exception\NotFoundException;
 use Cake\Network\Http\Response;
 use CvoTechnologies\Twitter\Webservice\Exception\UnknownStreamEndpointException;
@@ -91,5 +92,12 @@ class StatusesWebservice extends TwitterWebservice
 
             yield $this->_transformResource($endpoint, $response->json);
         }
+    }
+
+    protected function _transformResource(Endpoint $endpoint, array $result)
+    {
+        $result['created_at'] = new Time($result['created_at']);
+
+        return parent::_transformResource($endpoint, $result);
     }
 }

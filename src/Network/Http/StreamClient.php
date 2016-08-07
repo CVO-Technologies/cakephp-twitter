@@ -2,8 +2,8 @@
 
 namespace CvoTechnologies\Twitter\Network\Http;
 
-use Cake\Network\Http\Client;
-use Cake\Network\Http\Request;
+use Cake\Http\Client;
+use Cake\Http\Client\Request;
 
 class StreamClient extends Client
 {
@@ -13,7 +13,7 @@ class StreamClient extends Client
      *
      * Streams the responses from an iterator
      *
-     * @param \Cake\Network\Http\Request $request The request to send.
+     * @param \Cake\Http\Cloent\Request $request The request to send.
      * @param array $options Additional options to use.
      * @return \Iterator
      */
