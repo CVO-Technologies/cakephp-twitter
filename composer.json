@@ -1,30 +1,39 @@
 {
-  "name": "cvo-technologies/cakephp-twitter",
-  "type": "cakephp-plugin",
-  "description": "Twitter plugin",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Marlin Cremers",
-      "email": "m.cremers@cvo-technologies.com"
-    }
-  ],
-  "autoload": {
-    "psr-4": {
-      "CvoTechnologies\\Twitter\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "CvoTechnologies\\Twitter\\Test\\": "tests",
-      "Cake\\Test\\Fixture\\": "./vendor/cakephp/cakephp/tests/Fixture"
-    }
-  },
-  "require": {
-    "cakephp/cakephp": "3.*",
-    "muffin/webservice": "~1.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "~4.0"
-  }
+    "name": "cvo-technologies/cakephp-twitter",
+    "type": "cakephp-plugin",
+    "description": "CakePHP webservice implementation for Twitter",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marlin Cremers",
+            "email": "m.cremers@cvo-technologies.com",
+            "homepage": "https://cvo-technologies.com/"
+        }
+    ],
+    "support": {
+        "issues": "https://twitter.com/CVO-Technologies/cakephp-twitter/issues",
+        "irc": "irc://irc.freenode.org/cvo-technologies",
+        "source": "https://twitter.com/CVO-Technologies/cakephp-twitter"
+    },
+    "require": {
+        "muffin/webservice": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.5",
+        "cakephp/cakephp": "^3.3",
+        "cakephp/cakephp-codesniffer": "^2.1",
+        "cvo-technologies/stream-emulation": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CvoTechnologies\\Twitter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CvoTechnologies\\Twitter\\Test\\": "tests"
+        }
+    },
+    "prefer-stable": false,
+    "minimum-stability": "dev"
 }

@@ -96,7 +96,9 @@ class StatusesWebservice extends TwitterWebservice
 
     protected function _transformResource(Endpoint $endpoint, array $result)
     {
-        $result['created_at'] = new Time($result['created_at']);
+        if (isset($result['created_at'])) {
+            $result['created_at'] = new Time($result['created_at']);
+        }
 
         return parent::_transformResource($endpoint, $result);
     }
