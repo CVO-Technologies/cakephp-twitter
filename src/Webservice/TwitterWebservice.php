@@ -19,12 +19,19 @@ use Psr\Http\Message\ResponseInterface;
  */
 class TwitterWebservice extends Webservice
 {
-
+    /**
+     * Return the base URL to start URLs with.
+     *
+     * @return string
+     */
     protected function _baseUrl()
     {
         return '/1.1/' . $this->endpoint();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeCreateQuery(Query $query, array $options = [])
     {
         /* @var Response $response */
@@ -37,6 +44,9 @@ class TwitterWebservice extends Webservice
         return $this->_transformResource($response->json, $options['resourceClass']);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeReadQuery(Query $query, array $options = [])
     {
         $parameters = $query->where();
@@ -92,6 +102,9 @@ class TwitterWebservice extends Webservice
         return new ResultSet($resources, count($resources));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeUpdateQuery(Query $query, array $options = [])
     {
         if ((!isset($query->where()['id'])) || (is_array($query->where()['id']))) {
@@ -110,6 +123,9 @@ class TwitterWebservice extends Webservice
         return $this->_transformResource($response->json, $options['resourceClass']);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeDeleteQuery(Query $query, array $options = [])
     {
         if ((!isset($query->where()['id'])) || (is_array($query->where()['id']))) {
@@ -128,11 +144,23 @@ class TwitterWebservice extends Webservice
         return 1;
     }
 
+    /**
+     * Returns the default index action to run.
+     *
+     * @return string
+     */
     protected function _defaultIndex()
     {
         return 'list';
     }
 
+    /**
+     * Execute a HTTP query to the Twitter webservice.
+     *
+     * @param string $url URL to request.
+     * @param array $parameters Query parameters to pass.
+     * @return mixed JSON response
+     */
     protected function _doRequest($url, $parameters)
     {
         /* @var Response $response */
@@ -143,6 +171,12 @@ class TwitterWebservice extends Webservice
         return $response->json;
     }
 
+    /**
+     * Check the Twitter response for errors.
+     *
+     * @param ResponseInterface $response Twitter response to check.
+     * @return void
+     */
     protected function _checkResponse(ResponseInterface $response)
     {
         if (isset($response->json['errors'][0]['message'])) {
@@ -161,5 +195,4 @@ class TwitterWebservice extends Webservice
             throw new UnknownErrorException([$response->statusCode(), $error]);
         }
     }
-
 }

@@ -58,7 +58,8 @@ class Twitter extends Oauth
         foreach ($data as $key => $value) {
             $params[] = $key . '="' . $value . '"';
         }
-        $out .= implode(',', $params);  // Required for Twitter
+        $out .= implode(',', $params); // Required for Twitter
+
         return $out;
     }
 
@@ -102,6 +103,7 @@ class Twitter extends Oauth
                 $pairs[] = "$k=$val";
             }
         }
+
         return implode('&', $pairs);
     }
 }

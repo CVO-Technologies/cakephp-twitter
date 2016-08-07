@@ -7,7 +7,9 @@ use Muffin\Webservice\Model\Endpoint;
 
 class SavedSearchesEndpoint extends Endpoint
 {
-
+    /**
+     * {@inheritDoc}
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -16,6 +18,9 @@ class SavedSearchesEndpoint extends Endpoint
         $this->displayField('name');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function buildRules(RulesChecker $rules)
     {
         $rules->addCreate(function () {

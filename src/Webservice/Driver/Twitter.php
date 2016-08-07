@@ -17,7 +17,6 @@ use Muffin\Webservice\AbstractDriver;
  */
 class Twitter extends AbstractDriver
 {
-
     protected $_streamClient;
 
     /**
@@ -58,7 +57,7 @@ class Twitter extends AbstractDriver
     }
 
     /**
-     * Set or return an instance of the stream client used for communication with the streaming API
+     * Set or return an instance of the stream client used for communication with the streaming API.
      *
      * @param object $client The client to use
      *
@@ -102,7 +101,7 @@ class Twitter extends AbstractDriver
             'grant_type' => 'client_credentials'
         ]);
 
-        if ((!$response->isOk()) ||  (!$response->json['token_type'])) {
+        if ((!$response->isOk()) || (!$response->json['token_type'])) {
             return false;
         }
 

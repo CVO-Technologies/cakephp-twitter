@@ -6,7 +6,9 @@ use Muffin\Webservice\Model\Endpoint;
 
 class UsersEndpoint extends Endpoint
 {
-
+    /**
+     * {@inheritDoc}
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
