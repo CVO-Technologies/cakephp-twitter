@@ -34,6 +34,6 @@
             "CvoTechnologies\\Twitter\\Test\\": "tests"
         }
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "minimum-stability": "dev"
 }
