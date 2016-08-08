@@ -58,6 +58,7 @@ class Twitter extends Oauth
             $params[] = $key . '="' . $value . '"';
         }
         $out .= implode(',', $params); // Required for Twitter
+
         return $out;
     }
 
@@ -101,6 +102,7 @@ class Twitter extends Oauth
                 $pairs[] = "$k=$val";
             }
         }
+
         return implode('&', $pairs);
     }
 }
