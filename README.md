@@ -17,7 +17,7 @@ Ensure `require` is present in `composer.json`:
 ```json
 {
     "require": {
-        "cvo-technologies/cakephp-twitter": "~1.0"
+        "cvo-technologies/cakephp-twitter": "~1.1"
     }
 }
 ```
