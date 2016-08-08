@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "muffin/webservice",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/UseMuffin/Webservice.git",
-                "reference": "71b4976bb9d84a1f639b446d1c5f037da44d365f"
+                "reference": "9c47d2c51b7a63e205d3c76f315fc9b364a869f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/UseMuffin/Webservice/zipball/71b4976bb9d84a1f639b446d1c5f037da44d365f",
-                "reference": "71b4976bb9d84a1f639b446d1c5f037da44d365f",
+                "url": "https://api.github.com/repos/UseMuffin/Webservice/zipball/9c47d2c51b7a63e205d3c76f315fc9b364a869f2",
+                "reference": "9c47d2c51b7a63e205d3c76f315fc9b364a869f2",
                 "shasum": ""
             },
             "require-dev": {
@@ -50,6 +50,12 @@
                 {
                     "name": "Others",
                     "homepage": "https://github.com/usemuffin/webservice/graphs/contributors"
+                },
+                {
+                    "name": "Marlin Cremers",
+                    "email": "m.cremers@cvo-technologies.com",
+                    "homepage": "https://cvo-technologies.com",
+                    "role": "Author"
                 }
             ],
             "description": "Extremely simplistic webservices for CakePHP 3",
@@ -58,9 +64,10 @@
                 "api",
                 "cakephp",
                 "muffin",
+                "orm",
                 "webservice"
             ],
-            "time": "2016-04-03 18:20:17"
+            "time": "2016-08-08 11:10:20"
         }
     ],
     "packages-dev": [

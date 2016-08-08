@@ -2,6 +2,7 @@
 
 namespace CvoTechnologies\Twitter\Model\Endpoint;
 
+use Cake\Validation\Validator;
 use Muffin\Webservice\Model\Endpoint;
 use Muffin\Webservice\Query;
 
@@ -16,6 +17,15 @@ class StatusesEndpoint extends Endpoint
 
         $this->primaryKey('id');
         $this->displayField('text');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function validationDefault(Validator $validator)
+    {
+        return $validator
+            ->notEmpty('text');
     }
 
     /**

@@ -73,6 +73,21 @@ class TwitterTransportTest extends TestCase
         $this->assertFalse($twitterTransport->send($notification));
     }
 
+    public function testSendEmptyNotification()
+    {
+        $notification = $this->getMockBuilder('CvoTechnologies\Notifier\Notification')
+            ->setMethods(['message'])
+            ->getMock();
+        $notification
+            ->expects($this->once())
+            ->method('message')
+            ->with('twitter')
+            ->willReturn('');
+
+        $twitterTransport = new TwitterTransport();
+        $this->assertFalse($twitterTransport->send($notification));
+    }
+
     public function tearDown()
     {
         StreamWrapper::restoreWrapper('https');
