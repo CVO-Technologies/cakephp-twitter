@@ -23,7 +23,7 @@
         "cakephp/cakephp": "^3.3",
         "cakephp/cakephp-codesniffer": "^2.1",
         "cvo-technologies/stream-emulation": "^1.0",
-        "cvo-technologies/cakephp-notifier": "dev-master"
+        "cvo-technologies/cakephp-notifier": "^1.0"
     },
     "autoload": {
         "psr-4": {
