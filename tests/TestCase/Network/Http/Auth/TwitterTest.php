@@ -163,7 +163,7 @@ class TwitterTest extends TestCase
             'timestamp' => '1191242096'
         ];
         $auth = new Twitter();
-        $auth->authentication($request, $options);
+        $request = $auth->authentication($request, $options);
 
         $result = $request->header('Authorization');
         $expected = 'tR3+Ty81lMeYAr/Fid0kMTYa/WM=';

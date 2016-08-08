@@ -5,6 +5,7 @@ namespace CvoTechnologies\Twitter\Test\TestCase\Network\Http\Adapter;
 use Cake\Network\Http\Adapter\Stream;
 use Cake\Network\Http\Request;
 use Cake\TestSuite\TestCase;
+use CvoTechnologies\Twitter\Network\Http\Adapter\TwitterStream;
 
 /**
  * HTTP stream adapter test.
@@ -14,10 +15,9 @@ class TwitterStreamTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->stream = $this->getMock(
-            'CvoTechnologies\Twitter\Network\Http\Adapter\TwitterStream',
-            ['_send']
-        );
+        $this->stream = $this->getMockBuilder(TwitterStream::class)
+            ->setMethods(['_send'])
+            ->getMock();
     }
 
     /**
