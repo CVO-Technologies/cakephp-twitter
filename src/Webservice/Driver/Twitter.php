@@ -9,11 +9,9 @@ use CvoTechnologies\Twitter\Network\Http\StreamClient;
 use Muffin\Webservice\AbstractDriver;
 
 /**
- * Class Twitter
+ * Class Twitter.
  *
  * @method Client client() client(Client $client = null)
- *
- * @package CvoTechnologies\Twitter\Webservice\Driver
  */
 class Twitter extends AbstractDriver
 {
@@ -75,7 +73,7 @@ class Twitter extends AbstractDriver
     }
 
     /**
-     * Returns a application access token
+     * Returns a application access token.
      *
      * @return string|bool The access token or false in case of a failure
      */
@@ -111,16 +109,13 @@ class Twitter extends AbstractDriver
     }
 
     /**
-     * Returns a bearer token for application authentication
+     * Returns a bearer token for application authentication.
      *
      * @return string|bool Bearer token or bool in case of an error
      */
     public function bearerToken()
     {
-        if (!$this->config('consumerKey')) {
-            return false;
-        }
-        if (!$this->config('consumerSecret')) {
+        if ((!$this->config('consumerKey')) || (!$this->config('consumerSecret'))) {
             return false;
         }
         $consumerKey = urlencode($this->config('consumerKey'));
@@ -130,7 +125,7 @@ class Twitter extends AbstractDriver
     }
 
     /**
-     * Invalidates the locally stored access token
+     * Invalidates the locally stored access token.
      *
      * @return void
      */

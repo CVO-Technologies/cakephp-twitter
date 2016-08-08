@@ -2,17 +2,16 @@
 
 namespace CvoTechnologies\Twitter\Network\Http\Auth;
 
-use Cake\Network\Http\Auth\Oauth;
+use Cake\Http\Client\Auth\Oauth;
 
 class Twitter extends Oauth
 {
-
     /**
      * Use HMAC-SHA1 signing.
      *
      * This method is suitable for plain HTTP or HTTPS.
      *
-     * @param \Cake\Network\Http\Request $request The request object.
+     * @param \Cake\Http\Client\Request $request The request object.
      * @param array $credentials Authentication credentials.
      * @return string
      */
@@ -64,7 +63,7 @@ class Twitter extends Oauth
     }
 
     /**
-     * Sorts and normalizes request data and oauthValues
+     * Sorts and normalizes request data and oauthValues.
      *
      * Section 9.1.1 of Oauth spec.
      *
@@ -83,7 +82,9 @@ class Twitter extends Oauth
 
         $post = [];
         $body = $request->body();
-
+        if (is_string($body) && $request->getHeaderLine('content-type') === 'application/x-www-form-urlencoded') {
+            parse_str($body, $post);
+        }
         if (is_array($body)) {
             $post = $body;
         }

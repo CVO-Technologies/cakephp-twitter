@@ -19,11 +19,11 @@ class StatusesEndpoint extends Endpoint
     }
 
     /**
-     * Find tweets that were favorited by a user.
+     * Find the tweets favourited by the current user.
      *
-     * @param Query $query Query to modify.
-     * @param array $options Where conditions to add.
-     * @return Query
+     * @param \Muffin\Webservice\Query $query The query to modify.
+     * @param array $options Extra conditions to apply.
+     * @return \Muffin\Webservice\Query The modified query.
      */
     public function findFavorites(Query $query, array $options = [])
     {
@@ -35,12 +35,11 @@ class StatusesEndpoint extends Endpoint
     }
 
     /**
-     * Find retweets of a particular status.
+     * Find the retweets of the specified tweet.
      *
-     * @param Query $query Query to modify.
-     * @param array $options Set of options.
-     *     - status - Id of the status to get the retweets off
-     * @return Query
+     * @param \Muffin\Webservice\Query $query The query to modify.
+     * @param array $options The options to pass, including the tweet to get the retweets from.
+     * @return \Muffin\Webservice\Query The modified query.
      */
     public function findRetweets(Query $query, array $options)
     {
@@ -50,10 +49,10 @@ class StatusesEndpoint extends Endpoint
     }
 
     /**
-     * Stream the sample stream endpoint.
+     * Use the Twitter sample stream.
      *
-     * @param Query $query Query to modify.
-     * @return Query
+     * @param \Muffin\Webservice\Query $query The query to modify.
+     * @return \Muffin\Webservice\Query The modified query.
      */
     public function findSampleStream(Query $query)
     {
@@ -63,11 +62,11 @@ class StatusesEndpoint extends Endpoint
     }
 
     /**
-     * Stream the filter stream endpoint.
+     * Use the Twitter filter stream.
      *
-     * @param Query $query Query to modify.
-     * @param array $options Where conditions to add.
-     * @return Query
+     * @param \Muffin\Webservice\Query $query The query to modify.
+     * @param array $options The conditions to apply to the query.
+     * @return Query The modified query.
      */
     public function findFilterStream(Query $query, array $options)
     {

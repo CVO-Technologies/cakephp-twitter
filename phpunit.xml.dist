@@ -13,7 +13,7 @@
 
 	<!-- Add any additional test suites you want to run here -->
 	<testsuites>
-        <testsuite name="Twitter Test Suite">
+        <testsuite name="GitHub Test Suite">
             <directory>./tests/TestCase</directory>
         </testsuite>
 	</testsuites>

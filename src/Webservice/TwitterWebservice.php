@@ -2,6 +2,7 @@
 
 namespace CvoTechnologies\Twitter\Webservice;
 
+use Cake\Core\Exception\Exception;
 use Cake\Network\Exception\NotFoundException;
 use CvoTechnologies\Twitter\Webservice\Exception\RateLimitExceededException;
 use CvoTechnologies\Twitter\Webservice\Exception\UnknownErrorException;
@@ -11,18 +12,16 @@ use Muffin\Webservice\Webservice\Webservice;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class TwitterWebservice
+ * Class TwitterWebservice.
  *
  * @method Driver\Twitter driver()
- *
- * @package CvoTechnologies\Twitter\Webservice
  */
 class TwitterWebservice extends Webservice
 {
     /**
-     * Return the base URL to start URLs with.
+     * Return base url for API calls based on endpoint.
      *
-     * @return string
+     * @return string base url
      */
     protected function _baseUrl()
     {
@@ -41,7 +40,7 @@ class TwitterWebservice extends Webservice
             throw new Exception($response->json['errors'][0]['message']);
         }
 
-        return $this->_transformResource($response->json, $options['resourceClass']);
+        return $this->_transformResource($query->endpoint(), $response->json);
     }
 
     /**
@@ -120,7 +119,7 @@ class TwitterWebservice extends Webservice
             throw new Exception($response->json['errors'][0]['message']);
         }
 
-        return $this->_transformResource($response->json, $options['resourceClass']);
+        return $this->_transformResource($query->endpoint(), $response->json);
     }
 
     /**
@@ -141,13 +140,13 @@ class TwitterWebservice extends Webservice
             throw new Exception($response->json['errors'][0]['message']);
         }
 
-        return 1;
+        return true;
     }
 
     /**
-     * Returns the default index action to run.
+     * Return default index to be used when no conditions are supplied.
      *
-     * @return string
+     * @return string Default index.
      */
     protected function _defaultIndex()
     {
@@ -157,9 +156,9 @@ class TwitterWebservice extends Webservice
     /**
      * Execute a HTTP query to the Twitter webservice.
      *
-     * @param string $url URL to request.
-     * @param array $parameters Query parameters to pass.
-     * @return mixed JSON response
+     * @param string$url The URL of the endpoing to fetch information from.
+     * @param array $parameters The GET parameters to pass to the endpoint.
+     * @return JSON response from Twitter API.
      */
     protected function _doRequest($url, $parameters)
     {
@@ -172,9 +171,9 @@ class TwitterWebservice extends Webservice
     }
 
     /**
-     * Check the Twitter response for errors.
+     * Checks whether there are any errors in the response from Twitter.
      *
-     * @param ResponseInterface $response Twitter response to check.
+     * @param ResponseInterface $response The response from Twitter.
      * @return void
      */
     protected function _checkResponse(ResponseInterface $response)

@@ -8,16 +8,15 @@ use Cake\Network\Http\Response;
 
 class TwitterStream extends Stream
 {
-
     /**
-     * Stream buffer
+     * Stream buffer.
      *
      * @var string
      */
     protected $_buff;
 
     /**
-     * Open the stream and stream responses using a generator
+     * Open the stream and stream responses using a generator.
      *
      * @param \Cake\Network\Http\Request $request The request object.
      * @return \Generator Response generator
@@ -30,7 +29,7 @@ class TwitterStream extends Stream
     }
 
     /**
-     * Reads the Twitter streaming API and yields responses
+     * Reads the Twitter streaming API and yields responses.
      *
      * @param resource $stream Stream to read
      * @return \Generator Response generator

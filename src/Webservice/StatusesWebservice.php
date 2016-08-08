@@ -3,10 +3,7 @@
 namespace CvoTechnologies\Twitter\Webservice;
 
 use Cake\Datasource\ResultSetDecorator;
-use Cake\Event\Event;
-use Cake\Event\EventManager;
 use Cake\I18n\Time;
-use Cake\Network\Exception\NotFoundException;
 use Cake\Network\Http\Response;
 use CvoTechnologies\Twitter\Webservice\Exception\UnknownStreamEndpointException;
 use Exception;
@@ -88,13 +85,13 @@ class StatusesWebservice extends TwitterWebservice
     }
 
     /**
-     * Transforms streamed responses into resources
+     * Transforms streamed responses into resources.
      *
      * @param \Muffin\Webservice\Model\Endpoint $endpoint Endpoint to use for resource class
      * @param \Iterator $responseIterator Iterator to get responses from
      * @yield \Muffin\Webservice\Model\Resource Webservice resource
-     * @return \Generator Resource generator
      * @throws \Exception HTTP exception
+     * @return \Generator Resource generator
      */
     protected function _transformStreamResponses(Endpoint $endpoint, \Iterator $responseIterator)
     {
