@@ -31,7 +31,9 @@ class TwitterTransportTest extends TestCase
             ], \GuzzleHttp\Psr7\parse_query($request->getBody()->getContents()));
         }));
 
-        $notification = $this->getMock('CvoTechnologies\Notifier\Notification', ['message']);
+        $notification = $this->getMockBuilder('CvoTechnologies\Notifier\Notification')
+            ->setMethods(['message'])
+            ->getMock();
         $notification
             ->expects($this->once())
             ->method('message')
@@ -58,7 +60,9 @@ class TwitterTransportTest extends TestCase
         $statusUpdateEmulation->setError(500, 'Could not insert');
         StreamWrapper::emulate($statusUpdateEmulation);
 
-        $notification = $this->getMock('CvoTechnologies\Notifier\Notification', ['message']);
+        $notification = $this->getMockBuilder('CvoTechnologies\Notifier\Notification')
+            ->setMethods(['message'])
+            ->getMock();
         $notification
             ->expects($this->once())
             ->method('message')

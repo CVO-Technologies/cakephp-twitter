@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "591aed8b6ae357289bfbe15303b173b2",
-    "content-hash": "3a421af2a3fbdee17e537aa07ddc641d",
+    "hash": "a013df329f3499257b250c4741672627",
+    "content-hash": "89101f9462d3801158d43a209976902d",
     "packages": [
         {
             "name": "muffin/webservice",
@@ -349,6 +349,40 @@
                 "time"
             ],
             "time": "2016-06-15 06:26:37"
+        },
+        {
+            "name": "cvo-technologies/cakephp-notifier",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CVO-Technologies/cakephp-notifier.git",
+                "reference": "fb53ac10240eeb93681689f0d7e4a69addfc3849"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CVO-Technologies/cakephp-notifier/zipball/fb53ac10240eeb93681689f0d7e4a69addfc3849",
+                "reference": "fb53ac10240eeb93681689f0d7e4a69addfc3849",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "~3.0",
+                "php": ">=5.4.16"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "suggest": {
+                "cvo-technologies/cakephp-twitter": "For Twitter notifications"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "CvoTechnologies\\Notifier\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "CvoTechnologies/Notifier plugin for CakePHP",
+            "time": "2016-04-02 13:26:12"
         },
         {
             "name": "cvo-technologies/stream-emulation",
@@ -1962,7 +1996,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "cvo-technologies/cakephp-notifier": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

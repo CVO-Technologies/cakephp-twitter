@@ -2,6 +2,7 @@
 
 namespace CvoTechnologies\Twitter\Notifier\Transport;
 
+use Cake\Core\Exception\Exception;
 use Cake\Datasource\ModelAwareTrait;
 use CvoTechnologies\Notifier\AbstractTransport;
 use CvoTechnologies\Notifier\Notification;
@@ -26,9 +27,13 @@ class TwitterTransport extends AbstractTransport
         $this->modelFactory('Endpoint', ['Muffin\Webservice\Model\EndpointRegistry', 'get']);
         $this->loadModel('CvoTechnologies/Twitter.Statuses', 'Endpoint');
 
-        $status = $this->Statuses->save($this->Statuses->newEntity([
-            'text' => $notification->message(static::TYPE)
-        ]));
+        try {
+            $status = $this->Statuses->save($this->Statuses->newEntity([
+                'text' => $notification->message(static::TYPE)
+            ]));
+        } catch (Exception $exception) {
+            return false;
+        }
         if (!$status) {
             return false;
         }
