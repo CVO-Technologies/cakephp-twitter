@@ -158,6 +158,7 @@ class TwitterWebservice extends Webservice
      *
      * @param string$url The URL of the endpoing to fetch information from.
      * @param array $parameters The GET parameters to pass to the endpoint.
+     * @return JSON response from Twitter API.
      */
     protected function _doRequest($url, $parameters)
     {
