@@ -12,9 +12,9 @@ class StatusUpdateEmulation extends TwitterEmulation
      * @param \Psr\Http\Message\RequestInterface $request The request object/
      * @return \Psr\Http\Message\ResponseInterface The response object.
      */
-    protected function _run(RequestInterface $request)
+    protected function run(RequestInterface $request)
     {
-        $response = parent::_run($request);
+        $response = parent::run($request);
         if ($response) {
             return $response;
         }

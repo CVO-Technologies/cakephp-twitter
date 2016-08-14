@@ -15,7 +15,7 @@ abstract class TwitterEmulation extends HttpEmulation
      * @param \Psr\Http\Message\RequestInterface $request The request object/
      * @return \Psr\Http\Message\ResponseInterface The response object.
      */
-    protected function _run(RequestInterface $request)
+    protected function run(RequestInterface $request)
     {
         if ($this->getError()) {
             return new \GuzzleHttp\Psr7\Response($this->getError()['code'], [], json_encode([
