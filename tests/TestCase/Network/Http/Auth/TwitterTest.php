@@ -1,16 +1,34 @@
 <?php
 
-namespace CvoTechnologies\Twitter\Test\TestCase\Network\Http\Auth;
+namespace CvoTechnologies\Twitter\Test\TestCase\Http\Client\Auth;
 
+use Cake\Http\Client;
 use Cake\Network\Http\Request;
 use Cake\TestSuite\TestCase;
-use CvoTechnologies\Twitter\Network\Http\Auth\Twitter;
+use CvoTechnologies\StreamEmulation\Emulation\HttpEmulation;
+use CvoTechnologies\StreamEmulation\StreamWrapper;
+use CvoTechnologies\Twitter\Http\Client\Auth\Twitter;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Oauth test.
  */
 class TwitterTest extends TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        StreamWrapper::overrideWrapper('https');
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        StreamWrapper::restoreWrapper('https');
+    }
+
     /**
      * @expectedException \Cake\Core\Exception\Exception
      */
@@ -171,5 +189,19 @@ class TwitterTest extends TestCase
             'oauth_signature="' . $expected . '"',
             urldecode($result)
         );
+    }
+
+    public function testUsingAuth()
+    {
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function () {
+            return new Response();
+        }));
+
+        $client = new Client([
+            'auth' => [
+                'type' => 'CvoTechnologies/Twitter.Twitter'
+            ]
+        ]);
+        $client->get('https://example.com');
     }
 }

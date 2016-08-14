@@ -5,7 +5,7 @@ namespace CvoTechnologies\Twitter\Webservice\Driver;
 use Cake\Cache\Cache;
 use Cake\Network\Http\Client;
 use Cake\Utility\Hash;
-use CvoTechnologies\Twitter\Network\Http\StreamClient;
+use CvoTechnologies\Twitter\Http\StreamClient;
 use Muffin\Webservice\AbstractDriver;
 
 /**
@@ -50,7 +50,7 @@ class Twitter extends AbstractDriver
         $this->client(new Client($clientConfig));
         $this->streamClient(new StreamClient(Hash::merge($clientConfig, [
             'host' => 'stream.twitter.com',
-            'adapter' => 'CvoTechnologies\Twitter\Network\Http\Adapter\TwitterStream'
+            'adapter' => 'CvoTechnologies\Twitter\Http\Adapter\TwitterStream'
         ])));
     }
 

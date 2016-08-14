@@ -1,6 +1,6 @@
 <?php
 
-namespace CvoTechnologies\Twitter\Network\Http\Auth;
+namespace CvoTechnologies\Twitter\Http\Client\Auth;
 
 use Cake\Http\Client\Auth\Oauth;
 

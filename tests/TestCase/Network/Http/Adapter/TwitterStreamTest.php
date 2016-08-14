@@ -5,7 +5,7 @@ namespace CvoTechnologies\Twitter\Test\TestCase\Network\Http\Adapter;
 use Cake\Network\Http\Adapter\Stream;
 use Cake\Network\Http\Request;
 use Cake\TestSuite\TestCase;
-use CvoTechnologies\Twitter\Network\Http\Adapter\TwitterStream;
+use CvoTechnologies\Twitter\Http\Adapter\TwitterStream;
 
 /**
  * HTTP stream adapter test.
