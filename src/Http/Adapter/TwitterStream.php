@@ -1,6 +1,6 @@
 <?php
 
-namespace CvoTechnologies\Twitter\Network\Http\Adapter;
+namespace CvoTechnologies\Twitter\Http\Adapter;
 
 use Cake\Network\Http\Adapter\Stream;
 use Cake\Network\Http\Request;
