@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "591aed8b6ae357289bfbe15303b173b2",
-    "content-hash": "3a421af2a3fbdee17e537aa07ddc641d",
+    "hash": "4dac3796906e15175a8e73ecab1bab8b",
+    "content-hash": "b42bcfc1ddfc98818bb0324fda20620a",
     "packages": [
         {
             "name": "muffin/webservice",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/UseMuffin/Webservice.git",
-                "reference": "71b4976bb9d84a1f639b446d1c5f037da44d365f"
+                "reference": "9c47d2c51b7a63e205d3c76f315fc9b364a869f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/UseMuffin/Webservice/zipball/71b4976bb9d84a1f639b446d1c5f037da44d365f",
-                "reference": "71b4976bb9d84a1f639b446d1c5f037da44d365f",
+                "url": "https://api.github.com/repos/UseMuffin/Webservice/zipball/9c47d2c51b7a63e205d3c76f315fc9b364a869f2",
+                "reference": "9c47d2c51b7a63e205d3c76f315fc9b364a869f2",
                 "shasum": ""
             },
             "require-dev": {
@@ -50,6 +50,12 @@
                 {
                     "name": "Others",
                     "homepage": "https://github.com/usemuffin/webservice/graphs/contributors"
+                },
+                {
+                    "name": "Marlin Cremers",
+                    "email": "m.cremers@cvo-technologies.com",
+                    "homepage": "https://cvo-technologies.com",
+                    "role": "Author"
                 }
             ],
             "description": "Extremely simplistic webservices for CakePHP 3",
@@ -58,9 +64,10 @@
                 "api",
                 "cakephp",
                 "muffin",
+                "orm",
                 "webservice"
             ],
-            "time": "2016-04-03 18:20:17"
+            "time": "2016-08-08 11:10:20"
         }
     ],
     "packages-dev": [
@@ -185,21 +192,21 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "3.3.0-RC1",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "84d3c04812a7b973d965ce84b65a9b8646201769"
+                "reference": "37b9149877359288c27ae21e33cd1de55803f885"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/84d3c04812a7b973d965ce84b65a9b8646201769",
-                "reference": "84d3c04812a7b973d965ce84b65a9b8646201769",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/37b9149877359288c27ae21e33cd1de55803f885",
+                "reference": "37b9149877359288c27ae21e33cd1de55803f885",
                 "shasum": ""
             },
             "require": {
                 "aura/intl": "1.1.*",
-                "cakephp/chronos": "*",
+                "cakephp/chronos": "~1.0",
                 "ext-intl": "*",
                 "ext-mbstring": "*",
                 "php": ">=5.5.9",
@@ -254,7 +261,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-08-06 01:48:10"
+            "time": "2016-08-13 02:26:28"
         },
         {
             "name": "cakephp/cakephp-codesniffer",
@@ -297,16 +304,16 @@
         },
         {
             "name": "cakephp/chronos",
-            "version": "0.4.11",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/chronos.git",
-                "reference": "39db65d38488d6edd88bab5f33e19b1205ceeeda"
+                "reference": "a40b330d84a74975119c10a4e890391e0611e5ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/chronos/zipball/39db65d38488d6edd88bab5f33e19b1205ceeeda",
-                "reference": "39db65d38488d6edd88bab5f33e19b1205ceeeda",
+                "url": "https://api.github.com/repos/cakephp/chronos/zipball/a40b330d84a74975119c10a4e890391e0611e5ef",
+                "reference": "a40b330d84a74975119c10a4e890391e0611e5ef",
                 "shasum": ""
             },
             "require": {
@@ -348,20 +355,65 @@
                 "datetime",
                 "time"
             ],
-            "time": "2016-06-15 06:26:37"
+            "time": "2016-07-14 05:16:14"
         },
         {
-            "name": "cvo-technologies/stream-emulation",
-            "version": "1.0.2",
+            "name": "cvo-technologies/cakephp-notifier",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/CVO-Technologies/stream-emulation.git",
-                "reference": "febb7051daa7c5f5a9a8bd952b0b51a0867fb616"
+                "url": "https://github.com/CVO-Technologies/cakephp-notifier.git",
+                "reference": "85a059296b25c7b44a81349f4cc7143f4f742835"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CVO-Technologies/stream-emulation/zipball/febb7051daa7c5f5a9a8bd952b0b51a0867fb616",
-                "reference": "febb7051daa7c5f5a9a8bd952b0b51a0867fb616",
+                "url": "https://api.github.com/repos/CVO-Technologies/cakephp-notifier/zipball/85a059296b25c7b44a81349f4cc7143f4f742835",
+                "reference": "85a059296b25c7b44a81349f4cc7143f4f742835",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "^3.0",
+                "php": ">=5.4.16"
+            },
+            "require-dev": {
+                "cakephp/cakephp-codesniffer": "^2.1",
+                "phpunit/phpunit": "*"
+            },
+            "suggest": {
+                "cvo-technologies/cakephp-twitter": "For Twitter notifications"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "CvoTechnologies\\Notifier\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marlin Cremers",
+                    "email": "m.cremers@cvo-technologies.com",
+                    "homepage": "https://cvo-technologies.com/"
+                }
+            ],
+            "description": "CvoTechnologies/Notifier plugin for CakePHP",
+            "time": "2016-08-08 11:52:54"
+        },
+        {
+            "name": "cvo-technologies/stream-emulation",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CVO-Technologies/stream-emulation.git",
+                "reference": "1ca5242ec3ec7cc5b60defd61c593a9dd505d094"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CVO-Technologies/stream-emulation/zipball/1ca5242ec3ec7cc5b60defd61c593a9dd505d094",
+                "reference": "1ca5242ec3ec7cc5b60defd61c593a9dd505d094",
                 "shasum": ""
             },
             "require": {
@@ -387,7 +439,7 @@
                     "email": "m.cremers@cvo-technologies.com"
                 }
             ],
-            "time": "2016-08-07 22:53:45"
+            "time": "2016-08-14 23:27:05"
         },
         {
             "name": "doctrine/instantiator",
@@ -1862,28 +1914,29 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "30eed06dd6bc88410a4ff7f77b6d22f3ce13dbde"
+                "reference": "bb2d123231c095735130cc8f6d31385a44c7b308"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/30eed06dd6bc88410a4ff7f77b6d22f3ce13dbde",
-                "reference": "30eed06dd6bc88410a4ff7f77b6d22f3ce13dbde",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/bb2d123231c095735130cc8f6d31385a44c7b308",
+                "reference": "bb2d123231c095735130cc8f6d31385a44c7b308",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3|^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.6"
+                "phpunit/phpunit": "^4.6",
+                "sebastian/version": "^1.0.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -1907,7 +1960,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2015-08-24 13:29:44"
+            "time": "2016-08-09 15:02:57"
         },
         {
             "name": "zendframework/zend-diactoros",

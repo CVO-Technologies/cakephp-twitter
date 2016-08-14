@@ -115,7 +115,10 @@ class Twitter extends AbstractDriver
      */
     public function bearerToken()
     {
-        if ((!$this->config('consumerKey')) || (!$this->config('consumerSecret'))) {
+        if (!$this->config('consumerKey')) {
+            return false;
+        }
+        if (!$this->config('consumerSecret')) {
             return false;
         }
         $consumerKey = urlencode($this->config('consumerKey'));
