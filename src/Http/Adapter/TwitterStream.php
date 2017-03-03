@@ -2,8 +2,8 @@
 
 namespace CvoTechnologies\Twitter\Http\Adapter;
 
+use Cake\Http\Client\Request;
 use Cake\Network\Http\Adapter\Stream;
-use Cake\Network\Http\Request;
 use Cake\Network\Http\Response;
 
 class TwitterStream extends Stream
