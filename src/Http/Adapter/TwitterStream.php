@@ -2,9 +2,9 @@
 
 namespace CvoTechnologies\Twitter\Http\Adapter;
 
+use Cake\Http\Client\Adapter\Stream;
 use Cake\Http\Client\Request;
-use Cake\Network\Http\Adapter\Stream;
-use Cake\Network\Http\Response;
+use Cake\Http\Client\Response;
 
 class TwitterStream extends Stream
 {
